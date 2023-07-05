@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
 
 # Create the bar chart
-df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
+df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=10, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
     y=df_bar.values,
     x=df_bar.index,
@@ -52,11 +52,10 @@ app.layout = dbc.Container(
         ),
 
         dbc.Row(
-            [
+            [ html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                 dbc.Col(
                     [
                         html.Hr(),
-                         html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                         html.H5('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
                         dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
                     ],
