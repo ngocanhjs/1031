@@ -27,7 +27,9 @@ layout_bar = go.Layout(
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
 # Create the box chart
-fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres")
+fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", 
+                title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres",
+                color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])})
 med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
@@ -40,12 +42,7 @@ app.layout = dbc.Container(
     [
         html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
         html.H6("Subheading text", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
-        html.A('Click here for more information',href='https://www.netflix.com/',
-                   style={'text-align': 'center',
-                   'color': '#607D8B',
-                 'font-style': 'italic',
-                 'font-size': '14px'})]
-
+        html.A('Click here for more information',href='https://www.netflix.com/', style={'text-align': 'center', 'color': '#607D8B','font-style': 'italic','font-size': '14px'}),
         dbc.Row(
             [
                 html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
@@ -54,9 +51,9 @@ app.layout = dbc.Container(
                 dcc.Graph(id='plot-bar', figure=fig_bar)
             ]
         ),
-
         dbc.Row(
-            [ html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+            [ 
+                html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                 dbc.Col(
                     [
                         html.Hr(),
@@ -96,10 +93,10 @@ def update_bar_chart(value):
 @app.callback(Output('plot-box', 'figure'), [Input('dropdown', 'value')])
 def update_box_chart(genre_selection):
     data_subset = data.loc[data['MAIN_GENRE'] == genre_selection]
-    # create a new figure for the genre selection
-    fig = px.box(data_subset, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", title=f"The chart for {genre_selection} genre")
+    fig = px.box(data_subset, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", title=f"The chart for {genre_selection} genre",
+                color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])})
     return fig
 
 # Run the app
-if __name__== 'main':
+if _name__== '__main_':
     app.run_server(debug=True)
