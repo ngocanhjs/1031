@@ -35,7 +35,7 @@ sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
 # Create the Dash app
-app = dash.Dash(_name_, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 app.layout = dbc.Container(
@@ -98,5 +98,5 @@ def update_box_chart(genre_selection):
     return fig
 
 # Run the app
-if _name__== '__main_':
+if __name__== '__main_':
     app.run_server(debug=True)
