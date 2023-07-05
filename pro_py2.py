@@ -33,19 +33,18 @@ sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
 # Create the Dash app
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(_name_, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 app.layout = dbc.Container(
     [
         html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
         html.H6("Subheading text", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
-        html.H4('Click here for more information',
-               href='https://www.netflix.com/',
-               style={'text-align': 'center',
-                      'color': '#607D8B',
-                      'font-style': 'italic',
-                      'font-size': '14px'})
+        html.A('Click here for more information',href='https://www.netflix.com/',
+                   style={'text-align': 'center',
+                   'color': '#607D8B',
+                 'font-style': 'italic',
+                 'font-size': '14px'})]
 
         dbc.Row(
             [
@@ -102,5 +101,5 @@ def update_box_chart(genre_selection):
     return fig
 
 # Run the app
-if __name__ == '_main_':
+if __name__== 'main':
     app.run_server(debug=True)
