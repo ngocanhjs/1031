@@ -16,7 +16,7 @@ trace_bar = go.Bar(
     y=df_bar.values,
     x=df_bar.index,
     orientation='v',
-    marker=dict(color=['goldenrod','hotpink','chocolate','lawngreen','dodgerblue'])
+    marker=dict(color=['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])
 )
 data_bar = [trace_bar]
 layout_bar = go.Layout(
@@ -44,7 +44,7 @@ app.layout = dbc.Container(
             [
                 html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                 html.P('Number of countries:'),
-                dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
+                dcc.Slider(id='slider', min=1, max=10, step=1, value=5),
                 dcc.Graph(id='plot-bar', figure=fig_bar)
             ]
         ),
