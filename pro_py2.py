@@ -39,12 +39,14 @@ server = app.server
 app.layout = dbc.Container(
     [
         html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
+        html.H6("Subheading text", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
+        
 
         dbc.Row(
             [
                 html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                 html.P('Number of countries:'),
-                dcc.Slider(id='slider', min=1, max=10, step=1, value=5),
+                dcc.Slider(id='slider', min=1, max=10, step=1, value=10),
                 dcc.Graph(id='plot-bar', figure=fig_bar)
             ]
         ),
@@ -54,6 +56,7 @@ app.layout = dbc.Container(
                 dbc.Col(
                     [
                         html.Hr(),
+                         html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                         html.H5('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
                         dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
                     ],
