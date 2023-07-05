@@ -21,8 +21,8 @@ trace_bar = go.Bar(
 data_bar = [trace_bar]
 layout_bar = go.Layout(
     title='Top 5 countries with the most TV shows (1970-2020)',
-    xaxis=dict(title='Number of TV shows'),
-    yaxis=dict(title='Main Production')
+    xaxis=dict(title='Main Production'),
+    yaxis=dict(title='Number of TV shows')
 )
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
@@ -44,7 +44,7 @@ app.layout = dbc.Container(
             [
                 html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                 html.P('Number of countries:'),
-                dcc.Slider(id='slider', min=1, max=10, step=1, value=5),
+                dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
                 dcc.Graph(id='plot-bar', figure=fig_bar)
             ]
         ),
@@ -68,7 +68,8 @@ app.layout = dbc.Container(
                             id='dropdown',
                             options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
                             value="drama"
-                        )
+                        ),
+                        dcc.Graph(id="plot-box")
                     ]
                 )
             ]
