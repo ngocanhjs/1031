@@ -44,7 +44,7 @@ app.layout = dbc.Container(
                    style={'text-align': 'center',
                    'color': '#607D8B',
                  'font-style': 'italic',
-                 'font-size': '14px'})
+                 'font-size': '14px'})]
 
         dbc.Row(
             [
