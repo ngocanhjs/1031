@@ -40,7 +40,12 @@ app.layout = dbc.Container(
     [
         html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
         html.H6("Subheading text", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
-        
+        html.A('Click here for more information',
+               href='https://www.netflix.com/',
+               style={'text-align': 'center',
+                      'color': '#607D8B',
+                      'font-style': 'italic',
+                      'font-size': '14px'})
 
         dbc.Row(
             [
