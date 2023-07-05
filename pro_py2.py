@@ -41,7 +41,7 @@ server = app.server
 app.layout = dbc.Container(
     [
         html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
-        html.H6("Subheading text", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
+        html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
         html.A('Click here for more information',href='https://www.netflix.com/', style={'text-align': 'center', 'color': '#607D8B','font-style': 'italic','font-size': '14px'}),
         dbc.Row(
             [
