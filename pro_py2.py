@@ -8,7 +8,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 # Read the CSV data
-data = pd.read_csv(r'C:\data.csv')
+data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv') 
 
 # Generate the bar chart
 df = data['MAIN_PRODUCTION'].value_counts()
@@ -33,6 +33,7 @@ dropdown_options = [{"label": option, "value": option} for option in data["MAIN_
 
 # Create the app and define the layout
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+server=app.server
 
 app.layout = html.Div([
     html.H1('TV Show Dashboard', style={'text-align': 'center'}),
