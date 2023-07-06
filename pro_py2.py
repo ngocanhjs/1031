@@ -53,11 +53,11 @@ app.layout = dbc.Container(
         ),
         dbc.Row(
             [ 
-                html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+                html.H2('Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
                 dbc.Col(
                     [
                         html.Hr(),
-                        html.H5('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
+                        html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
                         dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
                     ],
                     width={'size': 9, 'offset': 0, 'order': 2}
@@ -65,8 +65,9 @@ app.layout = dbc.Container(
                 dbc.Col(
                     [
                         html.Hr(),
-                        html.H5('Select genre that you want to see:', className='text-center'),
+                        html.H6('The sub box chart', className='text-center'),
                         html.Hr(),
+                       html.H5('Select genre that you want to see:', className='text-center'),
                         dcc.Dropdown(
                             id='dropdown',
                             options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
@@ -84,7 +85,7 @@ app.layout = dbc.Container(
 # Callback to update the bar chart based on the slider value
 @app.callback(Output('plot-bar', 'figure'), [Input('slider', 'value')])
 def update_bar_chart(value):
-    df1 = df_bar.nlargest(n=value, keep='all').sort_values(ascending=False)
+    df1 = df_bar.nlargest(n=10, keep='all').sort_values(ascending=False)
     fig_bar.update_layout(title='Top {} countries that have the most TV shows in the period 1970 - 2020'.format(value))
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
