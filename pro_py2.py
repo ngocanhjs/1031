@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
 
 # Create the bar chart
-df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
+df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=10, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
     y=df_bar.values,
     x=df_bar.index,
@@ -43,32 +43,31 @@ app.layout = dbc.Container(
         html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
         html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
         html.A('Click here for more information',href='https://www.netflix.com/', style={'text-align': 'center', 'color': '#607D8B','font-style': 'italic','font-size': '14px'}),
-        html.Hr(),
         dbc.Row(
             [
                 html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                 html.P('Number of countries:'),
-                dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
+                dcc.Slider(id='slider', min=1, max=10, step=1, value=10),
                 dcc.Graph(id='plot-bar', figure=fig_bar)
             ]
         ),
         dbc.Row(
             [ 
-                html.H2('Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+                html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                 dbc.Col(
                     [
                         html.Hr(),
-                        html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
+html.H5('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
                         dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
                     ],
                     width={'size': 9, 'offset': 0, 'order': 2}
                 ),
                 dbc.Col(
                     [
-                        html.Hr(),
-                        html.H6('THE SUB BOX CHART', className='text-center'),
-                        html.Hr(),
-                       html.H5('Select genre that you want to see:', className='text-center'),
+                         html.Hr(),
+                         html.H6('THE SUB BOX CHART', className='text-center'),
+                         html.Hr(),
+                         html.H5('Select genre that you want to see:', className='text-center'),
                         dcc.Dropdown(
                             id='dropdown',
                             options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
@@ -86,7 +85,7 @@ app.layout = dbc.Container(
 # Callback to update the bar chart based on the slider value
 @app.callback(Output('plot-bar', 'figure'), [Input('slider', 'value')])
 def update_bar_chart(value):
-    df1 = df_bar.nlargest(n=5, keep='all').sort_values(ascending=False)
+    df1 = df_bar.nlargest(n=value, keep='all').sort_values(ascending=False)
     fig_bar.update_layout(title='Top {} countries that have the most TV shows in the period 1970 - 2020'.format(value))
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
