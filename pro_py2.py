@@ -43,21 +43,25 @@ app.layout = dbc.Container(
         html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
         html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
         html.A('Click here for more information',href='https://www.netflix.com/', style={'text-align': 'center', 'color': '#607D8B','font-style': 'italic','font-size': '14px'}),
+        html.Hr(),
         dbc.Row(
             [
                 html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+                html.Hr(),
+                html.H5('THE BAR CHART'),
                 html.P('Number of countries:'),
                 dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
                 dcc.Graph(id='plot-bar', figure=fig_bar)
             ]
-        ),html.Hr(),
+        ),
+        html.Hr(),
         dbc.Row(
             [ 
-                html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+                html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
                 dbc.Col(
                     [
                         html.Hr(),
-html.H5('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
+                html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
                         dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
                     ],
                     width={'size': 9, 'offset': 0, 'order': 2}
@@ -65,9 +69,9 @@ html.H5('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
                 dbc.Col(
                     [
                          html.Hr(),
-                         html.H6('THE SUB BOX CHART', className='text-center'),
+                         html.H5('THE SUB BOX CHART', className='text-center'),
                          html.Hr(),
-                         html.H5('Select genre that you want to see:', className='text-center'),
+                         html.H6('Select genre that you want to see:', className='text-center'),
                         dcc.Dropdown(
                             id='dropdown',
                             options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
