@@ -34,6 +34,8 @@ med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
+#Create the scatter chart
+fig_scatter = px.scatter(data,x= "RELEASE_YEAR", y ="SCORE", color = 'MAIN_GENRE')
 # Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
@@ -79,7 +81,33 @@ app.layout = dbc.Container(
                         ),
                         dcc.Graph(id="plot-box")
                     ]
+                ),html.Hr(),
+         dbc.Row(
+                [
+                  html.H2('The Scatter plot',style={'text-align': 'center', 'color': 'black'}),  
+                  dbc.Col(
+                      [
+                          html.Hr(),
+                          html.H5('The main scatter plot', style={'text-align': 'center'} ),
+                          dcc.Graph(id='plot-scatter', figure=fig_scatter)
+                      ],
+                dbc.Col(
+                    [
+                        html.Hr(),
+                        html.H5('The sub scatter',className='text-center'),
+                        html.Hr(),
+                        html.H6('Select genre that you want:',className='text-center'),
+                        dcc.Checklist(
+                            id='checkbox',
+                            options= [{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
+                            value="drama"
+                        ),
+                        dcc.Graph(id="plot-scatter")
+                    ]
                 )
+                  )  
+                  ]
+              )  
             ]
         )
     ],
@@ -102,6 +130,13 @@ def update_box_chart(genre_selection):
                 color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])})
     return fig
 
+#Callback to update the scatter chart based on the box checklist
+@app.callback(Output('plot-scatter', 'figure'), [Input('checkbox', 'value')])
+def update_box_chart(genre_selection):
+    data_subset = data.loc[data['MAIN_GENRE'] == genre_selection]
+    fig = px.scatter(data_subset,x= "RELEASE_YEAR", y ="SCORE", color = 'MAIN_GENRE', title=f"The chart for {genre_selection} genre",
+                color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])})
+    return fig
 # Run the app
 if __name__== '__main_':
     app.run_server(debug=True)
