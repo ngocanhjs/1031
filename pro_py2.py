@@ -104,7 +104,7 @@ app.layout = dbc.Container(
                             value="drama"
                         ),
                         dcc.Graph(id="plot-scatter")
-                ], style={'display': 'flex', 'flex-direction': 'row'}
+                ], style={'display': 'flex', 'flex-direction': 'row'})
                     ]
                 )
                   )  
