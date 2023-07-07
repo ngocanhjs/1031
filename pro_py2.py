@@ -97,12 +97,14 @@ app.layout = dbc.Container(
                         html.H5('The sub scatter',className='text-center'),
                         html.Hr(),
                         html.H6('Select genre that you want:',className='text-center'),
+                        html.Div(children=[
                         dcc.Checklist(
                             id='checkbox',
                             options= [{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
                             value="drama"
                         ),
                         dcc.Graph(id="plot-scatter")
+                ], style={'display': 'flex', 'flex-direction': 'row'}
                     ]
                 )
                   )  
