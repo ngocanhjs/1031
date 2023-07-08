@@ -8,8 +8,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 # Load the data for each chart
 bar_data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/lancuoi/main/data.csv')
-box_data = pd.read_csv('C:\data.csv')
-scatter_data = pd.read_csv('tv_show_data.csv')
+box_data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/lancuoi/main/data.csv')
+scatter_data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/lancuoi/main/data.csv')
 
 # Create the layout for the combined charts
 app = dash.Dash(__name__)
