@@ -9,7 +9,6 @@ import plotly.graph_objects as go
 # Read the CSV data
 data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
 
-
 # Create the bar chart
 df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
@@ -48,23 +47,28 @@ app.layout = dbc.Container(
         html.Hr(),
         dbc.Row(
             [
+                html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+                html.Hr(),
+                html.H5('THE BAR CHART'),
+                html.P('Number of countries:'),
+                dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
+                dcc.Graph(id='plot-bar', figure=fig_bar)
+            ]
+        ),
+        html.Hr(),
+        dbc.Row(
+            [
+                html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
                 dbc.Col(
                     [
-                        html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
-                        html.Hr(),
-                        html.H5('THE BAR CHART'),
-                        html.P('Number of countries:'),
-                        dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
-                        dcc.Graph(id='plot-bar', figure=fig_bar)
-                    ],
-                    width=6
-                ),
-                dbc.Col(
-                    [
-                        html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
                         html.Hr(),
                         html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
                         dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
+                    ],
+                    width={'size': 9, 'offset': 0, 'order': 2}
+                ),
+                dbc.Col(
+                    [
                         html.Hr(),
                         html.H5('THE SUB BOX CHART', className='text-center'),
                         html.Hr(),
@@ -75,9 +79,8 @@ app.layout = dbc.Container(
                             value="drama"
                         ),
                         dcc.Graph(id="plot-sub-box")
-                    ],
-                    width=6
-                ),
+                    ]
+                )
             ]
         ),
         dbc.Row(
