@@ -36,7 +36,7 @@ fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_gen
 fig_scatter = px.scatter(data,x= "RELEASE_YEAR", y ="SCORE", color = 'MAIN_GENRE')
 
 # Create the Dash app
-app = dash.Dash(_name_, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 app.layout = dbc.Container(
@@ -138,5 +138,5 @@ def update_scatter_chart(genre_selection):
     return fig
 
 # Run the app
-if _name_ == '_main_':
+if __name__ == '_main_':
     app.run_server(debug=True)
