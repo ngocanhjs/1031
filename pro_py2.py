@@ -81,7 +81,7 @@ app.layout = dbc.Container(
                         dcc.Graph(id="plot-sub-box")
                     ]
                 ),
-                dbc.Row(
+        dbc.Row(
                     [
                         dbc.Col(
                             [
@@ -120,7 +120,7 @@ app.layout = dbc.Container(
                             ],
                             md=6
                         ),
-                        dbc.Col(
+                        dbc.Row(
                             html.Div(
                                 [
                                     dcc.Graph(id='plot-scatter'),
