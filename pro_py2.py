@@ -79,7 +79,7 @@ app.layout = dbc.Container(
                             options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
                             value="drama"
                         ),
-                        dcc.Graph(id="plot-sub-box")
+                        dcc.Graph(id="plot-box")
                     ],
                 ),
             ]
@@ -106,7 +106,7 @@ app.layout = dbc.Container(
                             options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
                             value="drama"
                         ),
-                        dcc.Graph(id="plot-sub-scatter")
+                        dcc.Graph(id="plot-scatter")
                     ]
                 )
             ]
