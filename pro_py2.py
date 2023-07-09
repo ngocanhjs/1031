@@ -7,10 +7,10 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 #Load the data
-data = pd.read_csv("https://raw.githubusercontent.com/CorazonSilver/web-apps/main/netflix_titles_updated.csv")
+data = pd.read_csv("https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv")
 
 # Create the figure for the bar chart
-fig_bar = px.histogram(data, x='country', title='Number of TV Shows in Each Country', color='country', color_discrete_sequence=px.colors.qualitative.Alphabet)
+fig_bar = px.histogram(data, x='MAIN_PRODUCTION', title='Number of TV Shows in Each Country', color='MAIN_PRODUCTION', color_discrete_sequence=px.colors.qualitative.Alphabet)
 
 # Configure the figure layout for the bar chart
 fig_bar.update_layout(
@@ -21,12 +21,12 @@ fig_bar.update_layout(
 )
 
 # Create the figure for the box chart
-fig_box = px.box(data, x='MAIN_GENRE', y='IMDB_RATING', title='Distribution of IMDb Ratings Across Genres')
+fig_box = px.box(data, x='MAIN_GENRE', y='SCORE', title='Distribution of IMDb Ratings Across Genres')
 
 # Configure the figure layout for the box chart
 fig_box.update_layout(
-    xaxis_title="Genre",
-    yaxis_title="IMDb Rating",
+    xaxis_title="MAIN_GENRE",
+    yaxis_title="SCORE",
     margin=dict(l=50, r=50, t=50, b=50),
     paper_bgcolor="white"
 )
@@ -34,7 +34,7 @@ fig_box.update_layout(
 # Create the figure for the scatter plot
 fig_scatter = px.scatter(
     data,
-    x='IMDB_RATING',
+    x='SCORE',
     y='RELEASE_YEAR',
     color="MAIN_GENRE",
     title='IMDb Ratings vs Release Year by Genre'
@@ -42,8 +42,8 @@ fig_scatter = px.scatter(
 
 # Configure the figure layout for the scatter plot
 fig_scatter.update_layout(
-    xaxis_title="IMDb Rating",
-    yaxis_title="Release Year",
+    xaxis_title="SCORE",
+    yaxis_title="RELEASE_YEAR",
     margin=dict(l=50, r=50, t=50, b=50),
     paper_bgcolor="white"
 )
@@ -163,12 +163,12 @@ app.layout = dbc.Container(
 )
 def update_bar_chart(num_countries):
     # Get the countries with the most TV shows
-    top_countries = data['country'].value_counts().nlargest(num_countries)
+    top_countries = data['MAIN_PRODUCTION'].value_counts().nlargest(num_countries)
     top_countries_names = list(top_countries.index)
     # Filter the dataset to only include TV shows from these countries
-    filtered_data = data[data['country'].isin(top_countries_names)]
+    filtered_data = data[data['MAIN_PRODUCTION'].isin(top_countries_names)]
     # Create a new bar chart based on the filtered dataset
-    fig = px.histogram(filtered_data, x='country', title='Number of TV Shows in Each Country', color='country', color_discrete_sequence=px.colors.qualitative.Alphabet)
+    fig = px.histogram(filtered_data, x='MAIN_PRODUCTION', title='Number of TV Shows in Each Country', color='country', color_discrete_sequence=px.colors.qualitative.Alphabet)
     # Configure the layout of the new bar chart
     fig.update_layout(
         xaxis_title="Country",
@@ -189,7 +189,7 @@ def update_sub_box_chart(genre):
     # Filter the dataset to only include TV shows of the selected genre
     filtered_data = data[data['MAIN_GENRE'] == genre]
     # Create a new box chart based on the filtered dataset
-    fig = px.box(filtered_data, x='GENRE', y='IMDB_RATING', title='Distribution of IMDb Ratings Across ' + genre.title() + ' TV Shows')
+    fig = px.box(filtered_data, x='MAIN_GENRE', y='SCORE', title='Distribution of IMDb Ratings Across ' + genre.title() + ' TV Shows')
     # Configure the layout of the new box chart
     fig.update_layout(
         xaxis_title="Sub-Genre",
@@ -213,7 +213,7 @@ def update_scatter_plot(genres, year_range):
     # Create a new scatter plot based on the filtered dataset
     fig = px.scatter(
         filtered_data,
-        x='IMDB_RATING',
+        x='SCORE',
         y='RELEASE_YEAR',
         color="MAIN_GENRE",
         title='IMDb Ratings vs Release Year by Genre'
