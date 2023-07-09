@@ -7,8 +7,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 # Read the CSV data
-data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
-data = pd.DataFrame(scraped_data)
+df = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
+data = pd.DataFrame(df)
 # Create the bar chart
 df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
