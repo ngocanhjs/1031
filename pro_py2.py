@@ -138,23 +138,18 @@ def update_box_chart(genre_selection):
     [Input('checkbox', 'value')]
 )
 def update_scatter_chart(genre_selection):
-    if genre_selection is None:
-        # Show the initial scatter plot when no genres are selected
-        return fig_scatter
-    
-    # Filter the data based on the selected genres
-    data_subset = data.loc[data['MAIN_GENRE'].isin(genre_selection)]
-    
+    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection))]
     fig = px.scatter(
         data_subset,
         x="RELEASE_YEAR",
         y="SCORE",
         color="MAIN_GENRE",
         title="The scatter plot shows the scores of TV shows by genre",
-        color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
+        color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])}
     )
-
     return fig
+
+  
 
 if __name__ == 'main':
     app.run_server(debug=True)
