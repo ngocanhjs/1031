@@ -115,8 +115,6 @@ app.layout = dbc.Container(
                 html.Hr(),
                 dbc.Row(
                     [
-                        dbc.Col(
-                            [
                                 html.H6(
                                     "Select genre:",
                                     className="text-center"
@@ -128,25 +126,11 @@ app.layout = dbc.Container(
                                     className="checkbox-container"
                                 )
                             ]
-                        ),
-                        dbc.Col(
-                            [
-                                html.H6('Select release year range:', className='text-center'),
-                                dcc.RangeSlider(
-                                    id='year_slider',
-                                   min=1970,
-                                   max=2022,
-                                   value=[1970, 2022],
-                                    step=3,
-                                    marks={str(year): str(year) for year in [1970, 1990, 2000, 2010, 2022]}
-                                ),
-                            ]
                         )
-                    ],
-                    align='center',
-                )
-            ]
-        ),
+                                 
+                            ]
+                        ),
+       
         dbc.Row(
             [
                 html.Div(
@@ -188,10 +172,10 @@ def update_box_chart(genre_selection):
 # Callback to update the scatter chart based on the checkbox and range slider selection 
 @app.callback(
     Output('plot-scatter', 'figure'),
-    [Input('checkbox', 'value'), Input('year_slider', 'value')]
+    Input('checkbox', 'value')
 )
 def update_scatter_chart(genre_selection, year_range):
-    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection)) & (data['RELEASE_YEAR'].isin(range(year_range[0], year_range[1]+1)))]
+    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection))]
     fig = px.scatter(data_subset, x="RELEASE_YEAR", y="SCORE", color="MAIN_GENRE", title="The scatter plot shows the scores of TV shows by year and genre", color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])})
     return fig
 
