@@ -39,7 +39,7 @@ fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_gen
 
 # Create the scatter plot
 fig_scatter = px.scatter (data, x = "RELEASE_YEAR", y= "SCORE", color ="MAIN_GENRE",  title="The scatter plot shows the scores of TV shows by genre",
-        color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen)
+        color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])})
 # Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
