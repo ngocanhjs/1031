@@ -6,123 +6,228 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-# Read the CSV data
-data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
+#Load the data
+data = pd.read_csv("https://raw.githubusercontent.com/CorazonSilver/web-apps/main/netflix_titles_updated.csv")
 
-# Create the bar chart
-df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
-trace_bar = go.Bar(
-    y=df_bar.values,
-    x=df_bar.index,
-    orientation='v',
-    marker=dict(color=['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])
+# Create the figure for the bar chart
+fig_bar = px.histogram(data, x='country', title='Number of TV Shows in Each Country', color='country', color_discrete_sequence=px.colors.qualitative.Alphabet)
+
+# Configure the figure layout for the bar chart
+fig_bar.update_layout(
+    xaxis_title="Country",
+    yaxis_title="Number of TV shows",
+    margin=dict(l=50, r=50, t=50, b=50),
+    paper_bgcolor="white"
 )
-data_bar = [trace_bar]
-layout_bar = go.Layout(
-    title='Top 5 countries with the most TV shows (1970-2020)',
-    xaxis=dict(title='Main Production'),
-    yaxis=dict(title='Number of TV shows')
+
+# Create the figure for the box chart
+fig_box = px.box(data, x='MAIN_GENRE', y='IMDB_RATING', title='Distribution of IMDb Ratings Across Genres')
+
+# Configure the figure layout for the box chart
+fig_box.update_layout(
+    xaxis_title="Genre",
+    yaxis_title="IMDb Rating",
+    margin=dict(l=50, r=50, t=50, b=50),
+    paper_bgcolor="white"
 )
-fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
-# Create the box chart
-fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE",
-                 title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres",
-                 color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])})
-med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
-sorted_genre = med_score.index.tolist()
-fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
+# Create the figure for the scatter plot
+fig_scatter = px.scatter(
+    data,
+    x='IMDB_RATING',
+    y='RELEASE_YEAR',
+    color="MAIN_GENRE",
+    title='IMDb Ratings vs Release Year by Genre'
+)
 
-# Create the Dash app
+# Configure the figure layout for the scatter plot
+fig_scatter.update_layout(
+    xaxis_title="IMDb Rating",
+    yaxis_title="Release Year",
+    margin=dict(l=50, r=50, t=50, b=50),
+    paper_bgcolor="white"
+)
+
+# Create the app and apply Bootstrap CSS
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-server = app.server
 
-app.layout = dbc.Container([
-    html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
-    html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
-    html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': '#607D8B','font-style': 'italic','font-size': '14px'}),
-    html.Hr(),
-    dbc.Row([
-        html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+# Create the app layout
+app.layout = dbc.Container(
+    [
+        html.Div(
+            [
+                html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
+                html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+                html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': '#607D8B','font-style': 'italic','font-size': '14px'}),
+                html.Hr(),
+            ]
+        ),
+        dbc.Row(
+            [
+                html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+            ]
+        ),
+        html.Div(
+            [
+                dcc.Graph(id='plot-bar', figure=fig_bar),
+                html.P('Number of countries:', style={'text-align': 'center'}),
+                dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
+            ]
+        ),
         html.Hr(),
-        html.H5('THE BAR CHART'),
-        html.P('Number of countries:'),
-        dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
-        dcc.Graph(id='plot-bar', figure=fig_bar)
-    ]),
-    html.Hr(),
-    dbc.Row([
-        html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-        dbc.Col([
-            html.Hr(),
-            html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
-            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750})
-        ], width={'size': 9, 'offset': 0, 'order': 2}),
-        dbc.Col([
-            html.Hr(),
-            html.H5('THE SUB BOX CHART', className='text-center'),
-            html.Hr(),
-            html.H6('Select genre that you want to see:', className='text-center'),
-            dcc.Dropdown(
-                id='dropdown',
-                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
-                value="drama"
-            ),
-            dcc.Graph(id="plot-sub-box")
-        ])
-    ]),
-    dbc.Row([
-        html.H5('The scatter plot', className='text-center')
-    ]),
-    html.Hr(),
-    dbc.Row([
-        dbc.Col([
-            html.H6('Select genre:', className='text-center'),
-            dcc.Checklist(
-                id='checkbox',
-                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
-                value=["drama"]
-            ),
-        ], width=6),
-        dbc.Col([
-            html.H6('Select release year range:', className='text-center'),
-            dcc.RangeSlider(
-                id='year_slider',
-                min=data['RELEASE_YEAR'].min(),
-                max=data['RELEASE_YEAR'].max(),
-                value=[data['RELEASE_YEAR'].min(), data['RELEASE_YEAR'].max()],
-                step=None,
-                marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
-            ),
-        ], width=6)
-    ], align='center')
-], fluid=True)
+        dbc.Row(
+            [
+                html.H2('Distribution of IMDb Ratings Across Genres', style={'text-align': 'center', 'color': 'black'}),
+            ]
+        ),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
+                    ],
+                    width={'size': 9, 'offset': 0, 'order': 2}
+                ),
+                dbc.Col(
+                    [
+                        html.H6('Select genre:', className='text-center'),
+                        dcc.Dropdown(
+                            id='dropdown',
+                            options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
+                            value="drama"
+                        ),
+                        dcc.Graph(id="plot-sub-box")
+                    ]
+                )
+            ]
+        ),
+        html.Hr(),
+        dbc.Row(
+            [
+                html.H2('IMDb Ratings vs Release Year by Genre', style={'text-align': 'center', 'color': 'black'}),
+            ]
+        ),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        html.H6(
+                            'Select genre:',
+                            className='text-center',
+                        ),
+                        dcc.Checklist(
+                            id='checkbox',
+                            options=[
+                                {"label": option, "value": option}
+                                for option in data["MAIN_GENRE"].unique()
+                            ],
+                            value=["drama"],
+                        ),
+                    ],
+                    width=6
+                ),
+                dbc.Col(
+                    [
+                        html.H6(
+                            'Select release year range:',
+                            className='text-center'
+                        ),
+                        dcc.RangeSlider(
+                            id='year_slider',
+                            min=data['RELEASE_YEAR'].min(),
+                            max=data['RELEASE_YEAR'].max(),
+                            value=[data['RELEASE_YEAR'].min(), data['RELEASE_YEAR'].max()],
+                            step=None,
+                            marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
+                        ),
+                    ],
+                    width=6
+                )
+            ],
+            align='center'
+        ),
+        dbc.Row(
+            [
+                dcc.Graph(id='plot-scatter', figure=fig_scatter)
+            ],
+        ),
+    ],
+    fluid=True
+)
 
-# Callback to update the bar chart based on the slider value
-@app.callback(Output('plot-bar', 'figure'), [Input('slider', 'value')])
-def update_bar_chart(value):
-    df1 = df_bar.nlargest(n=value, keep='all').sort_values(ascending=False)
-    fig_bar.update_layout(title='Top {} countries that have the most TV shows in the period 1970 - 2020'.format(value))
-    fig_bar.update_traces(y=df1.values, x=df1.index)
-    return fig_bar
 
-# Callback to update the box chart based on the dropdown selection
-@app.callback(Output('plot-sub-box', 'figure'), [Input('dropdown', 'value')])
-def update_box_chart(genre_selection):
-    data_subset = data.loc[data['MAIN_GENRE'] == genre_selection]
-    fig = px.box(data_subset, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE",
-                 title=f"The chart for {genre_selection} genre",
-                 color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])})
+# Callback for updating the bar chart based on the slider value
+@app.callback(
+    Output('plot-bar', 'figure'),
+    [Input('slider', 'value')]
+)
+def update_bar_chart(num_countries):
+    # Get the countries with the most TV shows
+    top_countries = data['country'].value_counts().nlargest(num_countries)
+    top_countries_names = list(top_countries.index)
+    # Filter the dataset to only include TV shows from these countries
+    filtered_data = data[data['country'].isin(top_countries_names)]
+    # Create a new bar chart based on the filtered dataset
+    fig = px.histogram(filtered_data, x='country', title='Number of TV Shows in Each Country', color='country', color_discrete_sequence=px.colors.qualitative.Alphabet)
+    # Configure the layout of the new bar chart
+    fig.update_layout(
+        xaxis_title="Country",
+        yaxis_title="Number of TV shows",
+        margin=dict(l=50, r=50, t=50, b=50),
+        paper_bgcolor="white"
+    )
+    # Return the new bar chart
     return fig
 
-# Callback to update the scatter chart based on the checkbox and range slider selection
-@app.callback(Output('plot-scatter', 'figure'), [Input('checkbox', 'value'), Input('year_slider', 'value')])
-def update_scatter_chart(genre_selection, year_range):
-    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection)) & (data['RELEASE_YEAR'].isin(range(year_range[0], year_range[1]+1)))]
-    fig = px.scatter(data_subset, x="RELEASE_YEAR", y="SCORE", color="MAIN_GENRE",
-                     title="The scatter plot shows the scores of TV shows by year and genre",
-                     color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])})
+
+# Callback for updating the sub box chart based on the dropdown value
+@app.callback(
+    Output('plot-sub-box', 'figure'),
+    [Input('dropdown', 'value')]
+)
+def update_sub_box_chart(genre):
+    # Filter the dataset to only include TV shows of the selected genre
+    filtered_data = data[data['MAIN_GENRE'] == genre]
+    # Create a new box chart based on the filtered dataset
+    fig = px.box(filtered_data, x='GENRE', y='IMDB_RATING', title='Distribution of IMDb Ratings Across ' + genre.title() + ' TV Shows')
+    # Configure the layout of the new box chart
+    fig.update_layout(
+        xaxis_title="Sub-Genre",
+        yaxis_title="IMDb Rating",
+        margin=dict(l=50, r=50, t=50, b=50),
+        paper_bgcolor="white"
+    )
+    # Return the new box chart
     return fig
+
+
+# Callback for updating the scatter plot based on the checkbox and slider values
+@app.callback(
+    Output('plot-scatter', 'figure'),
+    [Input('checkbox', 'value'),
+    Input('year_slider', 'value')]
+)
+def update_scatter_plot(genres, year_range):
+    # Filter the dataset to only include TV shows with the selected genres and release year range
+    filtered_data = data[(data['MAIN_GENRE'].isin(genres)) & (data['RELEASE_YEAR'] >= year_range[0]) & (data['RELEASE_YEAR'] <= year_range[1])]
+    # Create a new scatter plot based on the filtered dataset
+    fig = px.scatter(
+        filtered_data,
+        x='IMDB_RATING',
+        y='RELEASE_YEAR',
+        color="MAIN_GENRE",
+        title='IMDb Ratings vs Release Year by Genre'
+    )
+    # Configure the layout of the new scatter plot
+    fig.update_layout(
+        xaxis_title="IMDb Rating",
+        yaxis_title="Release Year",
+        margin=dict(l=50, r=50, t=50, b=50),
+        paper_bgcolor="white"
+    )
+    # Return the new scatter plot
+    return fig
+
 
 if __name__ == '_main_':
     app.run_server(debug=True)
