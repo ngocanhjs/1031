@@ -94,12 +94,11 @@ app.layout = dbc.Container(
                     [
                         dbc.Col(
                             [
-                                html.H6('Select genre:', className='text-center'),
-                                dcc.Checklist(
-                                    id='checkbox',
-                                    options=[{"label": option, "value": option} for option in
-                                             data["MAIN_GENRE"].unique()],
-                                    value=["drama"]
+                               html.H6('Select genre:', className='text-center'),
+                            dcc.Checklist(
+                                id='checkbox',
+                                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
+                             value=["drama"]
                                 ),
                             ],
                             width=6
@@ -112,7 +111,7 @@ app.layout = dbc.Container(
                                     min=data['RELEASE_YEAR'].min(),
                                     max=data['RELEASE_YEAR'].max(),
                                     value=[data['RELEASE_YEAR'].min(), data['RELEASE_YEAR'].max()],
-                                    step=None,
+                                    step=5,
                                     marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
                                 ),
                             ],
