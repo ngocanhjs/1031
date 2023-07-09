@@ -9,6 +9,7 @@ import plotly.graph_objects as go
 # Read the CSV data
 df = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
 data = pd.DataFrame(df)
+
 # Create the bar chart
 df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
@@ -38,8 +39,15 @@ sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
 # Create the scatter plot
-fig_scatter = px.scatter (data, x = "RELEASE_YEAR", y= "SCORE", color ="MAIN_GENRE",  title="The scatter plot shows the scores of TV shows by genre",
-        color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])})
+fig_scatter = px.scatter(
+    data,
+    x="RELEASE_YEAR",
+    y="SCORE",
+    color="MAIN_GENRE",
+    title="The scatter plot shows the scores of TV shows by genre",
+    color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
+)
+
 # Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
@@ -49,6 +57,7 @@ app.layout = dbc.Container([
     html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'black', 'font-style': 'italic'}),
     html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': 'blue','font-style': 'italic','font-size': '14px'}),
     html.Hr(),
+    
     dbc.Row([
         html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
         html.Hr(),
@@ -63,7 +72,9 @@ app.layout = dbc.Container([
         ),
         dcc.Graph(id='plot-bar', figure=fig_bar)
     ]),
+    
     html.Hr(),
+    
     dbc.Row([
         html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
         dbc.Col([
@@ -84,23 +95,25 @@ app.layout = dbc.Container([
             dcc.Graph(id="plot-sub-box")
         ]),
     ]),
+    
     dbc.Row([
         html.Hr(),
         html.H2('The scatter plot', className='text-center'),
         html.Hr(),
         dbc.Row([
-                html.H6("Select genre:", className="text-center"),
-                dcc.Checklist(
-                    id="checkbox",
-                    options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
-                    value=["drama"],
-                    className="checkbox-container"
-                )
-            ]),  
+            html.H6("Select genre:", className="text-center"),
+            dcc.Checklist(
+                id="checkbox",
+                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
+                value=["drama"],
+                className="checkbox-container"
+            )
+        ]),
     ]),
+    
     dbc.Row([
         html.Div([
-            dcc.Graph(id='plot-scatter', figure = fig_scatter)
+            dcc.Graph(id='plot-scatter', figure=fig_scatter)
         ], className="scatter-col",),
     ], className="row-container",),
 ], className="main-container",)
@@ -112,7 +125,9 @@ app.layout = dbc.Container([
 )
 def update_bar_chart(value):
     df1 = df_bar.nlargest(n=value, keep='all').sort_values(ascending=False)
-    fig_bar.update_layout(title='Top {} countries that have the most TV shows in the period 1970 - 2020'.format(value))
+    fig_bar.update_layout(
+        title='Top {} countries that have the most TV shows in the period 1970 - 2020'.format(value)
+    )
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
 
@@ -139,10 +154,7 @@ def update_box_chart(genre_selection):
 )
 def update_scatter_chart(genre_selection):
     data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection))]
-
-    # Increase spacing between checkboxes
-    checkbox_spacing = '20px'  # Adjust the spacing as per your preference
-
+    
     fig = px.scatter(
         data_subset,
         x="RELEASE_YEAR",
@@ -151,7 +163,7 @@ def update_scatter_chart(genre_selection):
         title="The scatter plot shows the scores of TV shows by genre",
         color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])}
     )
-
+    
     # Update checkbox spacing
     fig.update_layout(
         updatemenus=[
@@ -176,14 +188,12 @@ def update_scatter_chart(genre_selection):
                 pad={"r": 10, "t": 10},
                 showactive=True,
                 xshift=10,
-                yshift=int(checkbox_spacing[:-2])
+                yshift=20
             ),
         ]
     )
-
+    
     return fig
 
-  
-
-if __name__ == 'main':
+if __name__ == '_main_':
     app.run_server(debug=True)
