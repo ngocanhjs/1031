@@ -120,21 +120,17 @@ app.layout = dbc.Container(
                         )
                     ],
                     md=6
-                )]),html.Hr(),
+                ),html.Hr(),
 
-                dbc.Row(
+        dbc.Row(
                     html.Div(
                         [
                             dcc.Graph(id='plot-scatter')
                         ]
                     )
-                ),
-            ],
-            align='center'
-        )
-    ],
+                ), align='center' ,
     fluid=True
-)
+
 
 # Callback to update the bar chart based on the slider value
 @app.callback(Output('plot-bar', 'figure'), [Input('slider', 'value')])
