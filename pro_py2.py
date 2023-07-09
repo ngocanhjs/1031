@@ -309,7 +309,7 @@ def update_scatter_chart(genre_selection):
 
 
 # Run the app
-if _name_ == '_main_':
+if __name__ == '_main_':
     app.run_server(debug=True)
 
 
