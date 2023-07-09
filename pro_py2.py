@@ -6,10 +6,10 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-# Read the CSV data 
+# Read the CSV data
 data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
 
-# Create the bar chart 
+# Create the bar chart
 df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
     y=df_bar.values,
@@ -25,130 +25,98 @@ layout_bar = go.Layout(
 )
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
-# Create the box chart 
-fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres", color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])})
+# Create the box chart
+fig_box = px.box(
+    data,
+    x="MAIN_GENRE",
+    y="SCORE",
+    color="MAIN_GENRE",
+    title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres",
+    color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
+)
 med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
-# Create the Dash app 
+# Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
-app.layout = dbc.Container(
-    [
-        html.H1(
-            'NETFLIX TV SHOW DATA VISUALIZATION',
-            style={'text-align': 'center'}
-        ),
-        html.H6(
-            "This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.",
-            style={'text-align': 'center', 'color': 'black', 'font-style': 'italic'}
-        ),
-        html.A(
-            'Click here for more information',
-            href='https://www.netflix.com/',
-            style={'text-align': 'center', 'color': 'blue','font-style': 'italic','font-size': '14px'}
-        ),
+app.layout = dbc.Container([
+    html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
+    html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'black', 'font-style': 'italic'}),
+    html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': 'blue','font-style': 'italic','font-size': '14px'}),
+    html.Hr(),
+    dbc.Row([
+        html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
         html.Hr(),
-        dbc.Row(
-            [
-                html.H2(
-                    'Top Countries with Most TV Shows',
-                    style={'text-align': 'center', 'color': 'black'}
-                ),
-                html.Hr(),
-                html.H5('THE BAR CHART'),
-                html.P('Number of countries:'),
-                dcc.Slider(
-                    id='slider',
-                    min=1,
-                    max=5,
-                    step=1,
-                    value=5
-                ),
-                dcc.Graph(id='plot-bar', figure=fig_bar)
-            ]
+        html.H5('THE BAR CHART'),
+        html.P('Number of countries:'),
+        dcc.Slider(
+            id='slider',
+            min=1,
+            max=5,
+            step=1,
+            value=5
         ),
+        dcc.Graph(id='plot-bar', figure=fig_bar)
+    ]),
+    html.Hr(),
+    dbc.Row([
+        html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+        dbc.Col([
+            html.Hr(),
+            html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
+            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
+        ], width=9,),
+        dbc.Col([
+            html.Hr(),
+            html.H5('THE SUB BOX CHART', className='text-center'),
+            html.Hr(),
+            html.H6('Select genre that you want to see:', className='text-center'),
+            dcc.Dropdown(
+                id='dropdown',
+                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
+                value="drama"
+            ),
+            dcc.Graph(id="plot-sub-box")
+        ]),
+    ]),
+    dbc.Row([
         html.Hr(),
-        dbc.Row(
-            [
-                html.H2(
-                    'The Distribution of Main Genre',
-                    style={'text-align': 'center', 'color': 'black'}
-                ),
-                dbc.Col(
-                    [
-                        html.Hr(),
-                        html.H5(
-                            'THE MAIN BOX CHART',
-                            style={'text-align': 'center'}
-                        ),
-                        dcc.Graph(
-                            id='plot-box',
-                            figure=fig_box,
-                            style={'height': 750}
-                        ),
-                    ],
-                    width=9,
-                ),
-                dbc.Col(
-                    [
-                        html.Hr(),
-                        html.H5('THE SUB BOX CHART', className='text-center'),
-                        html.Hr(),
-                        html.H6('Select genre that you want to see:', className='text-center'),
-                        dcc.Dropdown(
-                            id='dropdown',
-                            options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
-                            value="drama"
-                        ),
-                        dcc.Graph(id="plot-sub-box")
-                    ]
+        html.H2('The scatter plot', className='text-center'),
+        html.Hr(),
+        dbc.Row([
+            dbc.Col([
+                html.H6("Select genre:", className="text-center"),
+                dcc.Checklist(
+                    id="checkbox",
+                    options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
+                    value=["drama"],
+                    className="checkbox-container"
                 )
-            ]
-        ),
-        dbc.Row(
-            [
-                html.Hr(),
-                html.H2('The scatter plot', className='text-center'),
-                html.Hr(),
-                dbc.Row(
-                    [
-                                html.H6(
-                                    "Select genre:",
-                                    className="text-center"
-                                ),
-                                dcc.Checklist(
-                                    id="checkbox",
-                                    options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
-                                    value=["drama"],
-                                    className="checkbox-container"
-                                )
-                            ]
-                        )
-                                 
-                            ]
-                        ),
-       
-        dbc.Row(
-            [
-                html.Div(
-                    [
-                        dcc.Graph(
-                            id='plot-scatter'
-                        )
-                    ],
-                    className="scatter-col",
+            ]),
+            dbc.Col([
+                html.H6('Select release year range:', className='text-center'),
+                dcc.RangeSlider(
+                    id='year_slider',
+                    min=data['RELEASE_YEAR'].min(),
+                    max=data['RELEASE_YEAR'].max(),
+                    value=[data['RELEASE_YEAR'].min(), data['RELEASE_YEAR'].max()],
+                    step=30,
+                    marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
                 ),
-            ],
-            className="row-container",
-        ),
-    ],
-    className="main-container",
-)
+            ]),
+        ], align='center',),
+    ]),
+    dbc.Row([
+        html.Div([
+            dcc.Graph(id='plot-scatter')
+        ], className="scatter-col",),
+    ], className="row-container",),
+], className="main-container",)
 
-# Callback to update the bar chart based on the slider value 
+# Callback to update the bar chart based on the slider value
 @app.callback(
     Output('plot-bar', 'figure'),
     [Input('slider', 'value')]
@@ -159,27 +127,48 @@ def update_bar_chart(value):
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
 
-# Callback to update the box chart based on the dropdown selection 
+# Callback to update the box chart based on the dropdown selection
 @app.callback(
     Output('plot-sub-box', 'figure'),
     [Input('dropdown', 'value')]
 )
 def update_box_chart(genre_selection):
     data_subset = data.loc[data['MAIN_GENRE'] == genre_selection]
-    fig = px.box(data_subset, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", title=f"The chart for {genre_selection} genre", color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])})
+    fig = px.box(
+        data_subset,
+        x="MAIN_GENRE",
+        y="SCORE",
+        color="MAIN_GENRE",
+        title=f"The chart for {genre_selection} genre",
+        color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
+    )
     return fig
 
-# Callback to update the scatter chart based on the checkbox and range slider selection 
+# Callback to update the scatter chart based on the checkbox and range slider selection
 @app.callback(
     Output('plot-scatter', 'figure'),
-    Input('checkbox', 'value')
+    [Input('checkbox', 'value'), Input('year_slider', 'value')]
 )
 def update_scatter_chart(genre_selection, year_range):
-    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection))]
-    fig = px.scatter(data_subset, x="RELEASE_YEAR", y="SCORE", color="MAIN_GENRE", title="The scatter plot shows the scores of TV shows by year and genre", color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])})
+    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection)) & (data['RELEASE_YEAR'].isin(range(year_range[0], year_range[1]+1)))]
+    fig = px.scatter(
+        data_subset,
+        x="RELEASE_YEAR",
+        y="SCORE",
+        color="MAIN_GENRE",
+        title="The scatter plot shows the scores of TV shows by year and genre",
+        color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
+    )
+    
+    # Remove the year render from the x-axis
+    fig.update_layout(xaxis=dict(
+        tickmode='linear',
+        tick0=data_subset['RELEASE_YEAR'].min(),
+        dtick=10
+    ))
+    
     return fig
 
-# Run the app 
 if __name__ == '_main_':
     app.run_server(debug=True)
 
