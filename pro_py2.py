@@ -87,7 +87,6 @@ app.layout = dbc.Container([
         html.H2('The scatter plot', className='text-center'),
         html.Hr(),
         dbc.Row([
-            dbc.Col([
                 html.H6("Select genre:", className="text-center"),
                 dcc.Checklist(
                     id="checkbox",
@@ -95,19 +94,7 @@ app.layout = dbc.Container([
                     value=["drama"],
                     className="checkbox-container"
                 )
-            ]),
-            dbc.Col([
-                html.H6('Select release year range:', className='text-center'),
-                dcc.RangeSlider(
-                    id='year_slider',
-                    min=data['RELEASE_YEAR'].min(),
-                    max=data['RELEASE_YEAR'].max(),
-                    value=[data['RELEASE_YEAR'].min(), data['RELEASE_YEAR'].max()],
-                    step=30,
-                    marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
-                ),
-            ]),
-        ], align='center',),
+            ]),  
     ]),
     dbc.Row([
         html.Div([
@@ -147,10 +134,10 @@ def update_box_chart(genre_selection):
 # Callback to update the scatter chart based on the checkbox and range slider selection
 @app.callback(
     Output('plot-scatter', 'figure'),
-    [Input('checkbox', 'value'), Input('year_slider', 'value')]
+    [Input('checkbox', 'value')]
 )
 def update_scatter_chart(genre_selection, year_range):
-    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection)) & (data['RELEASE_YEAR'].isin(range(year_range[0], year_range[1]+1)))]
+    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection))]
     fig = px.scatter(
         data_subset,
         x="RELEASE_YEAR",
@@ -159,13 +146,6 @@ def update_scatter_chart(genre_selection, year_range):
         title="The scatter plot shows the scores of TV shows by year and genre",
         color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
     )
-    
-    # Remove the year render from the x-axis
-    fig.update_layout(xaxis=dict(
-        tickmode='linear',
-        tick0=data_subset['RELEASE_YEAR'].min(),
-        dtick=10
-    ))
     
     return fig
 
