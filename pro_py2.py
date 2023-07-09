@@ -31,8 +31,7 @@ fig_box = px.box(
     x="MAIN_GENRE",
     y="SCORE",
     color="MAIN_GENRE",
-    title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres",
-    color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
+    title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres"
 )
 med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
