@@ -95,12 +95,27 @@ def update_bar_chart(value):
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
 
-# Callback to update the box chart based on the dropdown selection
-@app.callback(Output('plot-box', 'figure'), [Input('dropdown', 'value')])
-def update_box_chart(genre_selection):
-    data_subset = data.loc[data['MAIN_GENRE'] == genre_selection]
-    fig = px.box(data_subset, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", title=f"The chart for {genre_selection} genre",
-                color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate','lawngreen','dodgerblue','darkviolet','plum','forestgreen','crimson','yellow'])})
+@app.callback(
+    Output('plot-scatter', 'figure'),
+    [Input('checkbox', 'value')]
+)
+def update_scatter_chart(genre_selection):
+    if not genre_selection:
+        # If no genres are selected, show an empty plot
+        fig = go.Figure()
+    else:
+        # Filter the data based on the selected genres
+        data_subset = data.loc[data['MAIN_GENRE'].isin(genre_selection)]
+        
+        fig = px.scatter(
+            data_subset,
+            x="RELEASE_YEAR",
+            y="SCORE",
+            color="MAIN_GENRE",
+            title="The scatter plot shows the scores of TV shows by genre",
+            color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
+        )
+    
     return fig
 
 # Run the app
