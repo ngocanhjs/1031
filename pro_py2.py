@@ -104,11 +104,9 @@ app.layout = dbc.Container(
                             ],
                             value=["drama"],
                             className="checkbox-container",
-                        ),
-                    ],
-                    width=6,
-                    className="checkbox-col",
-                ),
+                        )
+                    ]
+                )
                         dbc.Col(
                             [
                                 html.H6('Select release year range:', className='text-center'),
@@ -120,8 +118,8 @@ app.layout = dbc.Container(
                                     step= 20,
                                     marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
                                 ),
-                            ],
-                            width=6
+                            ]
+                           
                         )
                     ],
                     align='center',
@@ -135,7 +133,6 @@ app.layout = dbc.Container(
                     [
                         dcc.Graph(id='plot-scatter')
                     ],
-                    width=6,
                     className="scatter-col",
                 ),
             ],
