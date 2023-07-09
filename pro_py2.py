@@ -138,7 +138,7 @@ app.layout = dbc.Container(
                                    max=2022,
                                    value=[1970, 2022],
                                     step=3,
-                                    marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
+                                    marks={str(year): str(year) for year in [1970, 1990, 2000, 2010, 2022]}
                                 ),
                             ]
                         )
