@@ -38,6 +38,9 @@ med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
+# Create the scatter plot
+fig_scatter = px.scatter (data, x = "RELEASE_YEAR", y= "SCORE", color ="MAIN_GENRE",  title="The scatter plot shows the scores of TV shows by genre",
+        color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen)
 # Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
@@ -98,7 +101,7 @@ app.layout = dbc.Container([
     ]),
     dbc.Row([
         html.Div([
-            dcc.Graph(id='plot-scatter')
+            dcc.Graph(id='plot-scatter', figure = fig_scatter)
         ], className="scatter-col",),
     ], className="row-container",),
 ], className="main-container",)
@@ -143,7 +146,7 @@ def update_scatter_chart(genre_selection, year_range):
         x="RELEASE_YEAR",
         y="SCORE",
         color="MAIN_GENRE",
-        title="The scatter plot shows the scores of TV shows by year and genre",
+        title="The scatter plot shows the scores of TV shows by genre",
         color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod','hotpink','chocolate', 'lawngreen','dodgerblue'])}
     )
     
