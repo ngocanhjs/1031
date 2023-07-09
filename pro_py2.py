@@ -93,17 +93,22 @@ app.layout = dbc.Container(
                 html.Hr(),
                 dbc.Row(
                     [
-                        dbc.Col(
-                            [
-                               html.H6('Select genre:', className='text-center'),
-                            dcc.Checklist(
-                                id='checkbox',
-                                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
-                             value=["drama"]
-                                ),
+                       dbc.Col(
+                    [
+                        html.H6("Select genre:", className="text-center"),
+                        dcc.Checklist(
+                            id="checkbox",
+                            options=[
+                                {"label": option, "value": option}
+                                for option in data["MAIN_GENRE"].unique()
                             ],
-                            width=6
+                            value=["drama"],
+                            className="checkbox-container",
                         ),
+                    ],
+                    width=6,
+                    className="checkbox-col",
+                ),
                         dbc.Col(
                             [
                                 html.H6('Select release year range:', className='text-center'),
@@ -112,14 +117,15 @@ app.layout = dbc.Container(
                                     min=data['RELEASE_YEAR'].min(),
                                     max=data['RELEASE_YEAR'].max(),
                                     value=[data['RELEASE_YEAR'].min(), data['RELEASE_YEAR'].max()],
-                                    step=15,
+                                    step= 20,
                                     marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
                                 ),
                             ],
                             width=6
                         )
                     ],
-                    align='center'
+                    align='center',
+    
                 )
             ]
         ),
@@ -128,12 +134,15 @@ app.layout = dbc.Container(
                 html.Div(
                     [
                         dcc.Graph(id='plot-scatter')
-                    ]
-                )
-            ]
+                    ],
+                    width=6,
+                    className="scatter-col",
+                ),
+            ],
+            className="row-container",
         ),
     ],
-    fluid=True
+    className="main-container",
 )
 
 # Callback to update the bar chart based on the slider value
