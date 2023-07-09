@@ -88,7 +88,8 @@ app.layout = dbc.Container(
         ),
         dbc.Row(
             [
-                html.H5('The scatter plot', className='text-center'),
+                html.Hr(),
+                html.H2('The scatter plot', className='text-center'),
                 html.Hr(),
                 dbc.Row(
                     [
@@ -111,7 +112,7 @@ app.layout = dbc.Container(
                                     min=data['RELEASE_YEAR'].min(),
                                     max=data['RELEASE_YEAR'].max(),
                                     value=[data['RELEASE_YEAR'].min(), data['RELEASE_YEAR'].max()],
-                                    step=5,
+                                    step=15,
                                     marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
                                 ),
                             ],
