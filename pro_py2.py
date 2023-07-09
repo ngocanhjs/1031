@@ -134,13 +134,12 @@ def update_box_chart(genre_selection):
     return fig
 
 
-# Callback to update the scatter chart based on the checkbox and range slider selection
 @app.callback(
     Output('plot-scatter', 'figure'),
     [Input('checkbox', 'value')]
 )
 def update_scatter_chart(genre_selection):
-    data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection))]
+    data_subset = data.loc[data['MAIN_GENRE'].isin(genre_selection)]
     fig = px.scatter(
         data_subset,
         x="RELEASE_YEAR",
@@ -149,6 +148,36 @@ def update_scatter_chart(genre_selection):
         title="The scatter plot shows the scores of TV shows by genre",
         color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])}
     )
+    
+    # Update checkbox spacing
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                x=0.5,
+                y=1,
+                xanchor='auto',
+                yanchor='top',
+                buttons=list([
+                    dict(
+                        args=[{"visible": all(genre in genre_selection for genre in data['MAIN_GENRE'].unique())}],
+                        label="All",
+                        method="update"
+                    ),
+                    dict(
+                        args=[{"visible": [genre in genre_selection for genre in data['MAIN_GENRE'].unique()]}],
+                        label="None",
+                        method="update"
+                    )
+                ]),
+                direction="down",
+                pad={"r": 10, "t": 10},
+                showactive=True,
+                xshift=10,
+                yshift=20
+            ),
+        ]
+    )
+    
     return fig
 
 if __name__ == '_main_':
