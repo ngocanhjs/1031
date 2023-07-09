@@ -81,7 +81,7 @@ app.layout = dbc.Container(
                     ]
                 )
             ],
-            , className="row-container",
+            className="row-container",
         ),
     ],
     className="main-container",
