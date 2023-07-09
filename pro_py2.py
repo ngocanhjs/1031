@@ -50,6 +50,7 @@ fig_scatter.update_layout(
 
 # Create the app and apply Bootstrap CSS
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+server = app.server
 
 # Create the app layout
 app.layout = dbc.Container(
