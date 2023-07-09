@@ -134,10 +134,10 @@ app.layout = dbc.Container(
                                 html.H6('Select release year range:', className='text-center'),
                                 dcc.RangeSlider(
                                     id='year_slider',
-                                    min=data['RELEASE_YEAR'].min(),
-                                    max=data['RELEASE_YEAR'].max(),
-                                    value=[data['RELEASE_YEAR'].min(), data['RELEASE_YEAR'].max()],
-                                    step=30,
+                                   min=1970,
+                                   max=2022,
+                                   value=[1970, 2022],
+                                    step=3,
                                     marks={str(year): str(year) for year in data['RELEASE_YEAR'].unique()}
                                 ),
                             ]
