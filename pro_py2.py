@@ -80,7 +80,7 @@ genre_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
 
 genre_df = genre_df[genre_df['MAIN_PRODUCTION'] / genre_df['MAIN_PRODUCTION'].sum() > 0.01]
 
-fig_pie_1 = px.pie(
+fig_pie = px.pie(
 
     genre_df,
 
@@ -92,7 +92,7 @@ fig_pie_1 = px.pie(
 
 )
 
-fig_pie_1.update_traces(
+fig_pie.update_traces(
 
     textposition='inside',
 
@@ -168,7 +168,7 @@ app.layout = dbc.Container([
 
             html.H5('THE PIE CHART'),
 
-            dcc.Graph(id='plot-pie', figure=fig_pie_1)
+            dcc.Graph(id='plot-pie', figure=fig_pie)
 
         ], className="col-md-6")
 
@@ -188,21 +188,7 @@ app.layout = dbc.Container([
 
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
 
-        ]),
-
-        html.Div([
-
-            html.H2('GENRE Distribution', style={'text-align': 'center', 'color': 'black'}),
-
-            html.Hr(),
-
-            html.H5('THE PIE CHART'),
-
-            dcc.Graph(id='plot-pie', figure=fig_pie_2)
-
-        ], className="col-md-6")
-
-    ], style={'margin': '30px'}),
+        ]), style={'margin': '30px'},
 
 ], fluid=True)
 
