@@ -1,10 +1,19 @@
+import dash
+
 import dash_bootstrap_components as dbc
+
 from dash import html
+
 from dash import dcc
+
 from dash.dependencies import Input, Output
+
 import pandas as pd
+
 import plotly.express as px
+
 import plotly.graph_objects as go
+
 
 # Read the CSV data
 data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
