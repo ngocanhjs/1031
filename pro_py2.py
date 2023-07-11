@@ -67,8 +67,8 @@ server = app.server
 
 app.layout = dbc.Container([
     html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
-    html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
-    html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': '#607D8B', 'font-style': 'italic', 'font-size': '14px'}),
+    html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+    html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': 'blue', 'font-style': 'italic', 'font-size': '14px'}),
     html.Hr(),
     dbc.Row([
         html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
@@ -78,8 +78,9 @@ app.layout = dbc.Container([
             html.P('Number of countries:'),
             dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
             dcc.Graph(id='plot-bar', figure=fig_bar)
-        ]),
+        ]),html.Hr(),
         dbc.Col([
+            html.Hr(),
             html.H5('THE PIE CHART'),
             dcc.Graph(id='plot-pie', figure=fig_pie)
         ])
@@ -91,7 +92,7 @@ app.layout = dbc.Container([
             html.Hr(),
             html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
-        ], width=5),
+        ], width=8),
         dbc.Col([
             html.Hr(),
             html.H5('THE SCATTER PLOT', className='text-center'),
@@ -103,7 +104,7 @@ app.layout = dbc.Container([
                 value="drama"
             ),
             dcc.Graph(id="plot-sub-box"),
-        ], width=5)
+        ], width=8)
     ])
 ], fluid=True)
 
