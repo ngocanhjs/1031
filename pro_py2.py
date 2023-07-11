@@ -16,7 +16,7 @@ trace_bar = go.Bar(
     y=df_bar.values,
     x=df_bar.index,
     orientation='v',
-    marker=dict(color=['goldenrod','hotpink','chocolate','lawngreen','dodgerblue'])
+    marker=dict(color=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])
 )
 data_bar = [trace_bar]
 layout_bar = go.Layout(
@@ -50,8 +50,9 @@ fig_pie_2 = px.pie(
 fig_pie_2.update_traces(
     textposition='inside',
     textinfo='percent+label',
-    marker = dict(line = dict(color = 'white', width = 1))
+    marker=dict(line=dict(color='white', width=1))
 )
+
 # Create the new pie chart
 genre_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
 genre_df = genre_df[genre_df['MAIN_PRODUCTION'] / genre_df['MAIN_PRODUCTION'].sum() > 0.01]
@@ -64,24 +65,21 @@ fig_pie_1 = px.pie(
 fig_pie_1.update_traces(
     textposition='inside',
     textinfo='percent+label',
-    marker = dict(line = dict(color = 'white', width = 1))
+    marker=dict(line=dict(color='white', width=1))
 )
-
 
 # Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 app.layout = dbc.Container([
-    
     html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
-    
-    html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, a pie chart of country distribution, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'black', 'font-style': 'italic'}),
-    
-    html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': 'blue','font-style': 'italic','font-size': '14px'}),
-    
+    html.H6(
+        "This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, a pie chart of country distribution, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.",
+        style={'text-align': 'center', 'color': 'black', 'font-style': 'italic'}
+    ),
+    html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': 'blue', 'font-style': 'italic', 'font-size': '14px'}),
     html.Hr(),
-
     dbc.Row([
         # Bar chart section
         html.Div([
@@ -89,7 +87,6 @@ app.layout = dbc.Container([
             html.Hr(),
             html.H5('THE BAR CHART'),
             html.P('Number of countries:'),
-            
             dcc.Slider(
                 id='slider',
                 min=1,
@@ -97,10 +94,8 @@ app.layout = dbc.Container([
                 step=1,
                 value=5
             ),
-            
-
+            dcc.Graph(id='plot-bar', figure=fig_bar)
         ], className="col-md-6"),
-        
         # Pie chart section
         html.Div([
             html.H2('PRODUCTION Distribution', style={'text-align': 'center', 'color': 'black'}),
@@ -108,14 +103,11 @@ app.layout = dbc.Container([
             html.H5('THE PIE CHART'),
             dcc.Graph(id='plot-pie', figure=fig_pie_1)
         ], className="col-md-6")
-
     ], style={'margin': '30px'}),
-    
     html.Hr(),
-
     dbc.Row([
         html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-         html.Div([
+        html.Div([
             html.Hr(),
             html.H5('THE BOX CHART', style={'text-align': 'center'}),
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
@@ -126,11 +118,7 @@ app.layout = dbc.Container([
             html.H5('THE PIE CHART'),
             dcc.Graph(id='plot-pie', figure=fig_pie_2)
         ], className="col-md-6")
-
     ], style={'margin': '30px'}),
-    
-
-    
 ], fluid=True)
 
 # Callback to update the bar chart based on the slider value
@@ -141,5 +129,5 @@ def update_bar_chart(value):
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app.run_server(debug=False)
