@@ -41,17 +41,32 @@ fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_gen
 # Create the new pie chart
 genre_df = data['MAIN_GENRE'].value_counts().reset_index()
 genre_df = genre_df[genre_df['MAIN_GENRE'] / genre_df['MAIN_GENRE'].sum() > 0.01]
-fig_pie = px.pie(
+fig_pie_2 = px.pie(
     genre_df,
     values='MAIN_GENRE',
     names='index',
     color_discrete_sequence=px.colors.sequential.RdBu
 )
-fig_pie.update_traces(
+fig_pie_2.update_traces(
     textposition='inside',
     textinfo='percent+label',
     marker = dict(line = dict(color = 'white', width = 1))
 )
+# Create the new pie chart
+genre_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
+genre_df = genre_df[genre_df['MAIN_PRODUCTION'] / genre_df['MAIN_PRODUCTION'].sum() > 0.01]
+fig_pie_1 = px.pie(
+    genre_df,
+    values='MAIN_PRODUCTION',
+    names='index',
+    color_discrete_sequence=px.colors.sequential.RdBu
+)
+fig_pie_1.update_traces(
+    textposition='inside',
+    textinfo='percent+label',
+    marker = dict(line = dict(color = 'white', width = 1))
+)
+
 
 # Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -83,24 +98,15 @@ app.layout = dbc.Container([
                 value=5
             ),
             
-            dcc.Graph(id='plot-bar', figure=fig_bar),
-            
-            html.H5('Dropdown', style={'text-align': 'center'}),
-            
-            dcc.Dropdown(
-                id='dropdown',
-                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
-                value="drama"
-            ),
 
         ], className="col-md-6"),
         
         # Pie chart section
         html.Div([
-            html.H2('Genre Distribution', style={'text-align': 'center', 'color': 'black'}),
+            html.H2('PRODUCTION Distribution', style={'text-align': 'center', 'color': 'black'}),
             html.Hr(),
             html.H5('THE PIE CHART'),
-            dcc.Graph(id='plot-pie', figure=fig_pie)
+            dcc.Graph(id='plot-pie', figure=fig_pie_1)
         ], className="col-md-6")
 
     ], style={'margin': '30px'}),
@@ -109,12 +115,21 @@ app.layout = dbc.Container([
 
     dbc.Row([
         html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-        dbc.Col([
+         html.Div([
             html.Hr(),
             html.H5('THE BOX CHART', style={'text-align': 'center'}),
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
         ], width=12,),
-    ],style={'margin': '30px'}),
+        html.Div([
+            html.H2('GENRE Distribution', style={'text-align': 'center', 'color': 'black'}),
+            html.Hr(),
+            html.H5('THE PIE CHART'),
+            dcc.Graph(id='plot-pie', figure=fig_pie_2)
+        ], className="col-md-6")
+
+    ], style={'margin': '30px'}),
+    
+
     
 ], fluid=True)
 
