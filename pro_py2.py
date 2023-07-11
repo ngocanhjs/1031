@@ -38,34 +38,19 @@ med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
-# Create the new pie chart for country production
-country_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
-country_df = country_df[country_df['MAIN_PRODUCTION'] / country_df['MAIN_PRODUCTION'].sum() > 0.01]
-fig_country_pie = px.pie(
-    country_df,
-    values='MAIN_PRODUCTION',
-    names='index',
-    color_discrete_sequence=px.colors.sequential.RdBu
-)
-fig_country_pie.update_traces(
-    textposition='inside',
-    textinfo='percent+label',
-    marker=dict(line=dict(color='white', width=1))
-)
-
-# Create the new pie chart for main genre
+# Create the new pie chart
 genre_df = data['MAIN_GENRE'].value_counts().reset_index()
 genre_df = genre_df[genre_df['MAIN_GENRE'] / genre_df['MAIN_GENRE'].sum() > 0.01]
-fig_genre_pie = px.pie(
+fig_pie = px.pie(
     genre_df,
     values='MAIN_GENRE',
     names='index',
     color_discrete_sequence=px.colors.sequential.RdBu
 )
-fig_genre_pie.update_traces(
+fig_pie.update_traces(
     textposition='inside',
     textinfo='percent+label',
-    marker=dict(line=dict(color='white', width=1))
+    marker = dict(line = dict(color = 'white', width = 1))
 )
 
 # Create the Dash app
@@ -73,16 +58,23 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 app.layout = dbc.Container([
+    
     html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
+    
     html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, a pie chart of country distribution, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'black', 'font-style': 'italic'}),
+    
+    html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': 'blue','font-style': 'italic','font-size': '14px'}),
+    
     html.Hr(),
+
     dbc.Row([
-        # Bar chart and country production pie chart section
+        # Bar chart section
         html.Div([
             html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
             html.Hr(),
             html.H5('THE BAR CHART'),
             html.P('Number of countries:'),
+            
             dcc.Slider(
                 id='slider',
                 min=1,
@@ -90,16 +82,31 @@ app.layout = dbc.Container([
                 step=1,
                 value=5
             ),
-            dcc.Graph(id='plot-bar', figure=fig_bar)
+            
+            dcc.Graph(id='plot-bar', figure=fig_bar),
+            
+            html.H5('Dropdown', style={'text-align': 'center'}),
+            
+            dcc.Dropdown(
+                id='dropdown',
+                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
+                value="drama"
+            ),
+
         ], className="col-md-6"),
+        
+        # Pie chart section
         html.Div([
-            html.H2('Country Production Distribution', style={'text-align': 'center', 'color': 'black'}),
+            html.H2('Genre Distribution', style={'text-align': 'center', 'color': 'black'}),
             html.Hr(),
             html.H5('THE PIE CHART'),
-            dcc.Graph(id='plot-pie-country', figure=fig_country_pie)
+            dcc.Graph(id='plot-pie', figure=fig_pie)
         ], className="col-md-6")
+
     ], style={'margin': '30px'}),
+    
     html.Hr(),
+
     dbc.Row([
         html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
         dbc.Col([
@@ -108,6 +115,7 @@ app.layout = dbc.Container([
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
         ], width=12,),
     ],style={'margin': '30px'}),
+    
 ], fluid=True)
 
 # Callback to update the bar chart based on the slider value
@@ -118,5 +126,5 @@ def update_bar_chart(value):
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
 
-if __name__ == '__main__':
+if __name__ == '_main_':
     app.run_server(debug=False)
