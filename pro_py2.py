@@ -26,6 +26,22 @@ layout_bar = go.Layout(
 )
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
+# Create the bar chart
+df_bare = data['MAIN_GENRE'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
+trace_bare = go.Bar(
+    y=df_bare.values,
+    x=df_bare.index,
+    orientation='v',
+    marker=dict(color=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])
+)
+data_bare = [trace_bare]
+layout_bare = go.Layout(
+    title='Top 5 countries with the most TV shows (1970-2020)',
+    xaxis=dict(title='Main Genre'),
+    yaxis=dict(title='Number of TV shows')
+)
+fig_bare = go.Figure(data=data_bare, layout=layout_bare)
+
 # Create the box chart
 fig_box = px.box(
     data,
@@ -112,6 +128,22 @@ app.layout = dbc.Container([
             html.H5('THE BOX CHART', style={'text-align': 'center'}),
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
         ]),
+        dbc.Row([
+        # Bar chart section
+        html.Div([
+            html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+            html.Hr(),
+            html.H5('THE BAR CHART'),
+            html.P('Number of countries:'),
+            dcc.Slider(
+                id='slider',
+                min=1,
+                max=5,
+                step=1,
+                value=5
+            ),
+            dcc.Graph(id='plot-bare', figure=fig_bare)
+        ], className="col-md-6"),
         html.Div([
             html.H2('GENRE Distribution', style={'text-align': 'center', 'color': 'black'}),
             html.Hr(),
@@ -129,5 +161,12 @@ def update_bar_chart(value):
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
 
+# Callback to update the bar chart based on the slider value
+@app.callback(Output('plot-bare', 'figure'), [Input('slider', 'value')])
+def update_bar_chart(value):
+    df2 = df_bare.nlargest(n=value, keep='all').sort_values(ascending=False)
+    fig_bare.update_layout(title='Top {} countries that have the most TV shows in the period 1970 - 2020'.format(value))
+    fig_bare.update_traces(y=df2.values, x=df2.index)
+    return fig_bare
 if __name__ == '__main__':
     app.run_server(debug=False)
