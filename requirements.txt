@@ -3,4 +3,5 @@ pandas
 gunicorn
 dash_bootstrap_components
 matplotlib
-matplotlib.pyplot
+
+
