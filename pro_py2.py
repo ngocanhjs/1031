@@ -99,7 +99,7 @@ fig_scatter = px.scatter(
 
 # Create the Dash app
 
-app = dash.Dash(_name_, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 server = app.server
 
@@ -255,6 +255,6 @@ def update_scatter_plot(genre_selection):
     return fig
 
 
-if _name_ == '_main_':
+if __name__ == '_main_':
 
     app.run_server(debug=True)
