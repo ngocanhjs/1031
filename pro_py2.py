@@ -8,7 +8,8 @@ import plotly.graph_objects as go
 
 # Read the CSV data
 data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
-
+# Define color list
+colors = ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue']
 # Create the bar chart
 df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
