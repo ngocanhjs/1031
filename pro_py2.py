@@ -139,5 +139,5 @@ def update_scatter_plot(genre_selection):
     )
     return fig
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app.run_server(debug=True)
