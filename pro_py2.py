@@ -49,6 +49,35 @@ layout_bar = go.Layout(
 
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
+# Create the bar chart
+
+df2_bar = data['MAIN_GENRE'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
+
+trace_bar_2 = go.Bar(
+
+    y=df2_bar.values,
+
+    x=df2_bar.index,
+
+    orientation='v',
+
+    marker=dict(color=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])
+
+)
+
+data_bar_2 = [trace_bar_2]
+
+layout_bar_2 = go.Layout(
+
+    title='Top 5 countries with the most TV shows (1970-2020)',
+
+    xaxis=dict(title='Main Production'),
+
+    yaxis=dict(title='Number of TV shows')
+
+)
+
+fig_bar_2 = go.Figure(data=data_bar_2, layout=layout_bar_2)
 
 # Create the box chart
 
@@ -72,64 +101,34 @@ sorted_genre = med_score.index.tolist()
 
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
-
-# Create the new pie chart
-
+# Create the new pie chart for genre distribution
 genre_df = data['MAIN_GENRE'].value_counts().reset_index()
-
 genre_df = genre_df[genre_df['MAIN_GENRE'] / genre_df['MAIN_GENRE'].sum() > 0.01]
-
-fig_pie_2 = px.pie(
-
-    genre_df,
-
-    values='MAIN_GENRE',
-
-    names='index',
-
-    color_discrete_sequence=px.colors.sequential.RdBu
-
-)
-
-fig_pie_2.update_traces(
-
-    textposition='inside',
-
-    textinfo='percent+label',
-
-    marker=dict(line=dict(color='white', width=1))
-
-)
-
-
-# Create the new pie chart
-
-genre_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
-
-genre_df = genre_df[genre_df['MAIN_PRODUCTION'] / genre_df['MAIN_PRODUCTION'].sum() > 0.01]
-
 fig_pie_1 = px.pie(
-
     genre_df,
-
-    values='MAIN_PRODUCTION',
-
+    values='MAIN_GENRE',
     names='index',
-
     color_discrete_sequence=px.colors.sequential.RdBu
-
 )
-
 fig_pie_1.update_traces(
-
     textposition='inside',
-
     textinfo='percent+label',
-
     marker=dict(line=dict(color='white', width=1))
-
 )
 
+# Create the new pie chart for country distribution
+country_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
+country_df = country_df[country_df['MAIN_PRODUCTION'] / country_df['MAIN_PRODUCTION'].sum() > 0.01]
+fig_pie_2 = px.pie(
+    country_df,
+    values='MAIN_PRODUCTION',
+    names='index',
+    color_discrete_sequence=px.colors.sequential.RdBu
+)
+fig_pie_2.update_traces(
+    textposition='inside',
+    textinfo='percent+label',
+    marker=dict(line=dict(color='white', width=1)))
  
 # Create the Dash app
 
@@ -184,43 +183,12 @@ app.layout = dbc.Container([
 
             dcc.Graph(id='plot-bar', figure=fig_bar)
 
-        ], className="col-md-6"),
-
+        ], className="col-md-6")], style={'margin': '30px'}),
         # Pie chart section
 
         html.Div([
 
             html.H2('PRODUCTION Distribution', style={'text-align': 'center', 'color': 'black'}),
-
-            html.Hr(),
-
-            html.H5('THE PIE CHART'),
-
-            dcc.Graph(id='plot-pie', figure=fig_pie_1)
-
-        ], className="col-md-6")
-
-    ], style={'margin': '30px'}),
-
-    html.Hr(),
-
-    dbc.Row([
-
-        html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-
-        html.Div([
-
-            html.Hr(),
-
-            html.H5('THE BOX CHART', style={'text-align': 'center'}),
-
-            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
-
-        ]),
-
-        html.Div([
-
-            html.H2('GENRE Distribution', style={'text-align': 'center', 'color': 'black'}),
 
             html.Hr(),
 
@@ -232,7 +200,49 @@ app.layout = dbc.Container([
 
     ], style={'margin': '30px'}),
 
-], fluid=True)
+    html.Hr(),
+
+    dbc.Row([
+
+        html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+
+
+        html.Div([
+
+            html.H2('GENRE Distribution', style={'text-align': 'center', 'color': 'black'}),
+
+            html.Hr(),
+           html.H5('THE BAR CHART'),
+
+            html.P('Number of countries:'),
+
+            dcc.Slider(
+
+                id='slider',
+
+                min=1,
+
+                max=5,
+
+                step=1,
+
+                value=5
+
+            ), 
+
+            dcc.Graph(id='plot-bar_2', figure=fig_bar_2)
+
+        ], className="col-md-6")], style={'margin': '30px'}),
+
+            html.H5('THE PIE CHART'),
+
+            dcc.Graph(id='plot-pie', figure=fig_pie_1)
+
+        ], className="col-md-6")
+
+    ], style={'margin': '30px'})
+
+
 
 
 # Callback to update the bar chart based on the slider value
@@ -246,6 +256,18 @@ def update_bar_chart(value):
     fig_bar.update_layout(title='Top {} countries that have the most TV shows in the period 1970 - 2020'.format(value))
 
     fig_bar.update_traces(y=df1.values, x=df1.index)
+
+    return fig_bar
+
+@app.callback(Output('plot-bar', 'figure'), [Input('slider', 'value')])
+
+def update_bar_chart(value):
+
+    df2 = df2_bar.nlargest(n=value, keep='all').sort_values(ascending=False)
+
+    fig_bar_2.update_layout(title='Top {} countries that have the most TV shows in the period 1970 - 2020'.format(value))
+
+    fig_bar_2.update_traces(y=df2.values, x=df2.index)
 
     return fig_bar
 
