@@ -30,8 +30,8 @@ fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 country_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
 country_df = country_df[country_df['MAIN_PRODUCTION'] /  country_df['MAIN_PRODUCTION'].sum() > 0.01]
 
-fig-pie = px.pie(country_df, values='MAIN_PRODUCTION', names='index',color_discrete_sequence=px.colors.sequential.RdBu)
-fig-pie.update_traces(textposition='inside', textinfo='percent+label',
+fig_pie = px.pie(country_df, values='MAIN_PRODUCTION', names='index',color_discrete_sequence=px.colors.sequential.RdBu)
+fig_pie.update_traces(textposition='inside', textinfo='percent+label',
                   marker = dict(line = dict(color = 'white', width = 1)))
 
 # Create the box chart
@@ -64,7 +64,7 @@ app.layout = dbc.Container(
                 dbc.Col(
                     [
                 html.H5('THE PIE CHART'),
-                dcc.Graph(id='plot-pie', figure=fig-pie)])
+                dcc.Graph(id='plot-pie', figure=fig_pie)])
             ]
         ),
         html.Hr(),
