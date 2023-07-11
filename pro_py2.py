@@ -74,7 +74,7 @@ app.layout = dbc.Container([
             html.Hr(),
             html.H5('THE PIE CHART'),
             dcc.Graph(id='plot-pie', figure=fig_pie)
-        ], md=15)
+        ], md=10)
     ]),
     html.Hr(),
     dbc.Row([
