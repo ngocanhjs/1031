@@ -43,7 +43,7 @@ country_df = country_df[country_df['MAIN_PRODUCTION'] / country_df['MAIN_PRODUCT
 fig_pie = px.pie(country_df, values='MAIN_PRODUCTION', names='index',
                  color_discrete_sequence=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])
 fig_pie.update_traces(textposition='inside', textinfo='percent+label', marker=dict(line=dict(color='white', width=1)))
-fig_pie.update_layout(height=400)
+fig_pie.update_layout(height=600)
 
 # Create the scatter plot
 fig_scatter = px.scatter(
@@ -63,6 +63,8 @@ app.layout = dbc.Container([
     html.Hr(),
     dbc.Row([
         dbc.Col([
+            html.Hr(),
+            html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
             html.H5('THE BAR CHART'),
             html.P('Number of countries:'),
             dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
@@ -79,8 +81,8 @@ app.layout = dbc.Container([
         dbc.Col([
             html.Hr(),
             html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
-            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
-        ], width=9),
+            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 950}),
+        ], width=6),
         dbc.Col([
             html.Hr(),
             html.H5('THE SCATTER PLOT', className='text-center'),
@@ -92,7 +94,7 @@ app.layout = dbc.Container([
                 value="drama"
             ),
             dcc.Graph(id="plot-sub-box"),
-        ], width=3)
+        ], width=5)
     ],style={'margin': '30px'}),
 ], fluid=True)
 
