@@ -188,7 +188,7 @@ app.layout = dbc.Container([
 
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
 
-        ]), style={'margin': '30px'},
+        ]), 
 
 ], fluid=True)
 
