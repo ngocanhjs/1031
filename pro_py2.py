@@ -140,7 +140,7 @@ def update_box_chart(genre_selection):
     return fig
 
 # Callback to update the scatter chart based on the checkbox and range slider selection
-@app.callback(Output('plot-scatter', 'figure'), [Inpuput('checkbox', 'value')]
+@app.callback(Output('plot-scatter', 'figure'), [Input('checkbox', 'value')]
 )
 def update_scatter_chart(genre_selection):
     data_subset = data.loc[(data['MAIN_GENRE'].isin(genre_selection))]
