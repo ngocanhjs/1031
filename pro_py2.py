@@ -78,7 +78,7 @@ app.layout = dbc.Container([
             html.P('Number of countries:'),
             dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
             dcc.Graph(id='plot-bar', figure=fig_bar)
-        ]),html.Hr(),
+        ]),
         dbc.Col([
             html.Hr(),
             html.H5('THE PIE CHART'),
@@ -92,7 +92,7 @@ app.layout = dbc.Container([
             html.Hr(),
             html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
-        ], width=8),
+        ], width=5),
         dbc.Col([
             html.Hr(),
             html.H5('THE SCATTER PLOT', className='text-center'),
@@ -104,7 +104,7 @@ app.layout = dbc.Container([
                 value="drama"
             ),
             dcc.Graph(id="plot-sub-box"),
-        ], width=8)
+        ], width=5)
     ])
 ], fluid=True)
 
