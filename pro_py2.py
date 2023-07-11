@@ -105,7 +105,7 @@ fig_pie_1.update_traces(
  
 # Create the Dash app
 
-app = dash.Dash(__name-_, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 server = app.server
 
