@@ -93,7 +93,7 @@ app.layout = dbc.Container([
             ),
             dcc.Graph(id="plot-sub-box"),
         ], width=3)
-    ])
+    ],style={'margin': '30px'}),
 ], fluid=True)
 
 # Callback to update the bar chart based on the slider value
