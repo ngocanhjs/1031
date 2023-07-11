@@ -59,7 +59,7 @@ fig_scatter = px.scatter(
 )
 
 # Create the Dash app
-app = dash.Dash(_name_, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 app.layout = dbc.Container([
     html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
