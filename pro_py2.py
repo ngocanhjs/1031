@@ -11,25 +11,19 @@ import plotly.graph_objects as go
 data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
 
 # Create the bar chart
-df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(
-    ascending=False)
-
+df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
     y=df_bar.values,
     x=df_bar.index,
     orientation='v',
-    marker=dict(color=['goldenrod', 'hotpink', 'chocolate',
-                        'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow'])
+    marker=dict(color=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow'])
 )
-
 data_bar = [trace_bar]
-
 layout_bar = go.Layout(
     title='Top 5 countries with the most TV shows (1970-2020)',
     xaxis=dict(title='Main Production'),
     yaxis=dict(title='Number of TV shows')
 )
-
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
 # Create the box chart
@@ -38,17 +32,14 @@ fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE",
                  color_discrete_map={genre: color for genre, color in
                                      zip(data['MAIN_GENRE'].unique(),
                                          ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow'])})
-
 med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
-
 fig_box.update_layout(xaxis=dict(categoryorder='array',
                                   categoryarray=sorted_genre))
 
 # Create the pie chart
 country_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
 country_df = country_df[country_df['MAIN_PRODUCTION'] / country_df['MAIN_PRODUCTION'].sum() > 0.01]
-
 fig_pie = px.pie(country_df, values='MAIN_PRODUCTION', names='index',
                  color_discrete_sequence=px.colors.sequential.RdBu)
 fig_pie.update_traces(textposition='inside', textinfo='percent+label',
@@ -66,13 +57,16 @@ app.layout = dbc.Container([
            style={'text-align': 'center', 'color': '#607D8B', 'font-style': 'italic', 'font-size': '14px'}),
     html.Hr(),
     dbc.Row([
-        html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
-        html.Hr(),
-        html.H5('THE BAR CHART'),
-        html.P('Number of countries:'),
-        dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
-        dcc.Graph(id='plot-bar', figure=fig_bar),
-        dcc.Graph(id='plot-pie', figure=fig_pie),
+        dbc.Col([
+            html.H5('THE BAR CHART'),
+            html.P('Number of countries:'),
+            dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
+            dcc.Graph(id='plot-bar', figure=fig_bar)
+        ], md=6),
+        dbc.Col([
+            html.H5('THE PIE CHART'),
+            dcc.Graph(id='plot-pie', figure=fig_pie)
+        ], md=6)
     ]),
     html.Hr(),
     dbc.Row([
@@ -81,7 +75,7 @@ app.layout = dbc.Container([
             html.Hr(),
             html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
-        ], width={'size': 9, 'offset': 0, 'order': 2}),
+        ], width=9),
         dbc.Col([
             html.Hr(),
             html.H5('THE SUB BOX CHART', className='text-center'),
@@ -92,8 +86,8 @@ app.layout = dbc.Container([
                 options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
                 value="drama"
             ),
-            dcc.Graph(id="plot-box"),
-        ])
+            dcc.Graph(id="plot-sub-box"),
+        ], width=3)
     ])
 ], fluid=True)
 
@@ -108,7 +102,7 @@ def update_bar_chart(value):
 
 
 # Callback to update the box chart based on the dropdown selection
-@app.callback(Output('plot-box', 'figure'), [Input('dropdown', 'value')])
+@app.callback(Output('plot-sub-box', 'figure'), [Input('dropdown', 'value')])
 def update_box_chart(genre_selection):
     data_subset = data.loc[data['MAIN_GENRE'] == genre_selection]
     fig = px.box(data_subset, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE",
