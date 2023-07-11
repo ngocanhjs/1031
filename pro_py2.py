@@ -111,7 +111,7 @@ app.layout = dbc.Container([
             html.Hr(),
             html.H5('THE BOX CHART', style={'text-align': 'center'}),
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
-        ], width=12,),
+        ]),
         html.Div([
             html.H2('GENRE Distribution', style={'text-align': 'center', 'color': 'black'}),
             html.Hr(),
