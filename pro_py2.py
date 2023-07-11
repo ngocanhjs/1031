@@ -12,38 +12,45 @@ data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.c
 
 # Create the bar chart
 df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
+
 trace_bar = go.Bar(
     y=df_bar.values,
     x=df_bar.index,
     orientation='v',
-    marker=dict(color=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow'])
+    marker=dict(
+        color=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow']
+    )
 )
+
 data_bar = [trace_bar]
+
 layout_bar = go.Layout(
     title='Top 5 countries with the most TV shows (1970-2020)',
     xaxis=dict(title='Main Production'),
-    yaxis=dict(title='Number of TV shows')
+    yaxis=dict(title='Number of TV shows'),
+    height=400
 )
+
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
 # Create the box chart
 fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE",
                  title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres",
-                 color_discrete_map={genre: color for genre, color in
-                                     zip(data['MAIN_GENRE'].unique(),
-                                         ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow'])})
+                 color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(),
+                                                                         ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow'])})
 med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
-fig_box.update_layout(xaxis=dict(categoryorder='array',
-                                  categoryarray=sorted_genre))
+fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
 
 # Create the pie chart
 country_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
 country_df = country_df[country_df['MAIN_PRODUCTION'] / country_df['MAIN_PRODUCTION'].sum() > 0.01]
+
 fig_pie = px.pie(country_df, values='MAIN_PRODUCTION', names='index',
                  color_discrete_sequence=px.colors.sequential.RdBu)
-fig_pie.update_traces(textposition='inside', textinfo='percent+label',
-                      marker=dict(line=dict(color='white', width=1)))
+
+fig_pie.update_traces(textposition='inside', textinfo='percent+label', marker=dict(line=dict(color='white', width=1)))
+fig_pie.update_layout(height=400)
 
 # Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -51,13 +58,13 @@ server = app.server
 
 app.layout = dbc.Container([
     html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
-    html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.",
-            style={'text-align': 'center', 'color': 'lightgray', 'font-style': 'italic'}),
-    html.A('Click here for more information', href='https://www.netflix.com/',
-           style={'text-align': 'center', 'color': '#607D8B', 'font-style': 'italic', 'font-size': '14px'}),
+    html.H6("This interactive web application includes a bar chart visualizing the top 5 countries with the highest Netflix TV show production, as well as a box chart displaying the distribution of scores within different genres. Users can interact with the slider and dropdown menu to explore the data.", style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+    html.A('Click here for more information', href='https://www.netflix.com/', style={'text-align': 'center', 'color': 'blue', 'font-style': 'italic', 'font-size': '14px'}),
     html.Hr(),
     dbc.Row([
+        html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
         dbc.Col([
+             html.Hr(),
             html.H5('THE BAR CHART'),
             html.P('Number of countries:'),
             dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
@@ -91,7 +98,6 @@ app.layout = dbc.Container([
     ])
 ], fluid=True)
 
-
 # Callback to update the bar chart based on the slider value
 @app.callback(Output('plot-bar', 'figure'), [Input('slider', 'value')])
 def update_bar_chart(value):
@@ -100,18 +106,15 @@ def update_bar_chart(value):
     fig_bar.update_traces(y=df1.values, x=df1.index)
     return fig_bar
 
-
 # Callback to update the box chart based on the dropdown selection
 @app.callback(Output('plot-sub-box', 'figure'), [Input('dropdown', 'value')])
 def update_box_chart(genre_selection):
     data_subset = data.loc[data['MAIN_GENRE'] == genre_selection]
     fig = px.box(data_subset, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE",
                  title=f"The chart for {genre_selection} genre",
-                 color_discrete_map={genre: color for genre, color in
-                                     zip(data['MAIN_GENRE'].unique(),
-                                         ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow'])})
+                 color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(),
+                                                                         ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue', 'darkviolet', 'plum', 'forestgreen', 'crimson', 'yellow'])})
     return fig
-
 
 if __name__ == '_main_':
     app.run_server(debug=True)
