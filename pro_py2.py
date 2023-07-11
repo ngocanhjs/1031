@@ -30,9 +30,8 @@ layout_bar = go.Layout(
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
 # Create the box chart
-fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE",
-                 title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres",
-                 color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])})
+fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres",
+                color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])})
 med_score = data.groupby('MAIN_GENRE')['SCORE'].median().sort_values()
 sorted_genre = med_score.index.tolist()
 fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_genre))
@@ -40,17 +39,13 @@ fig_box.update_layout(xaxis=dict(categoryorder='array', categoryarray=sorted_gen
 # Create the pie chart
 country_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
 country_df = country_df[country_df['MAIN_PRODUCTION'] / country_df['MAIN_PRODUCTION'].sum() > 0.01]
-fig_pie = px.pie(country_df, values='MAIN_PRODUCTION', names='index',
-                 color_discrete_sequence=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])
+fig_pie = px.pie(country_df, values='MAIN_PRODUCTION', names='index', color_discrete_sequence=['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])
 fig_pie.update_traces(textposition='inside', textinfo='percent+label', marker=dict(line=dict(color='white', width=1)))
 fig_pie.update_layout(height=600)
 
 # Create the scatter plot
 fig_scatter = px.scatter(
-    data,
-    x="RELEASE_YEAR",
-    y="SCORE",
-    color="MAIN_GENRE",
+    data, x="RELEASE_YEAR", y="SCORE", color="MAIN_GENRE",
     title="The scatter plot shows the scores of TV shows by genre",
     color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])}
 )
@@ -58,6 +53,7 @@ fig_scatter = px.scatter(
 # Create the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
+
 app.layout = dbc.Container([
     html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
     html.Hr(),
@@ -94,8 +90,9 @@ app.layout = dbc.Container([
                 value="drama"
             ),
             dcc.Graph(id="plot-sub-box"),
-        ], width=5)
-    ],style={'margin': '30px'}),
+        ], width=5),
+        dbc.Col(width=1, id='empty-col')  # Empty column on the right
+    ], style={'margin': '30px'}),
 ], fluid=True)
 
 # Callback to update the bar chart based on the slider value
@@ -111,13 +108,11 @@ def update_bar_chart(value):
 def update_scatter_plot(genre_selection):
     data_subset = data.loc[data['MAIN_GENRE'] == genre_selection]
     fig = px.scatter(
-        data_subset,
-        x="RELEASE_YEAR",
-        y="SCORE",
-        color="MAIN_GENRE",
+        data_subset, x="RELEASE_YEAR", y="SCORE", color="MAIN_GENRE",
         title=f"The scatter plot for {genre_selection} genre",
         color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])}
     )
+    fig.update_layout(margin=dict(l=0, r=50, t=50, b=0))  # Add margin on the right
     return fig
 
 if __name__ == '_main_':
