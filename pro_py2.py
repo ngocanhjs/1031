@@ -60,7 +60,7 @@ app.layout = dbc.Container(
                 html.H5('THE BAR CHART'),
                 html.P('Number of countries:'),
                 dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
-                dcc.Graph(id='plot-bar', figure=fig_bar)],
+                dcc.Graph(id='plot-bar', figure=fig_bar)]),
                 dbc.Col(
                     [
                 html.H5('THE PIE CHART'),
