@@ -26,6 +26,14 @@ layout_bar = go.Layout(
 )
 fig_bar = go.Figure(data=data_bar, layout=layout_bar)
 
+# Create the pie chart
+country_df = data['MAIN_PRODUCTION'].value_counts().reset_index()
+country_df = country_df[country_df['MAIN_PRODUCTION'] /  country_df['MAIN_PRODUCTION'].sum() > 0.01]
+
+fig-pie = px.pie(country_df, values='MAIN_PRODUCTION', names='index',color_discrete_sequence=px.colors.sequential.RdBu)
+fig-pie.update_traces(textposition='inside', textinfo='percent+label',
+                  marker = dict(line = dict(color = 'white', width = 1)))
+
 # Create the box chart
 fig_box = px.box(data, x="MAIN_GENRE", y="SCORE", color="MAIN_GENRE", 
                 title="The box chart demonstrates the distribution of range score of TV shows according to TV show genres",
@@ -45,13 +53,18 @@ app.layout = dbc.Container(
         html.A('Click here for more information',href='https://www.netflix.com/', style={'text-align': 'center', 'color': '#607D8B','font-style': 'italic','font-size': '14px'}),
         html.Hr(),
         dbc.Row(
-            [
-                html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
+            [html.H2('Top Countries with Most TV Shows', style={'text-align': 'center', 'color': 'black'}),
                 html.Hr(),
+                dbc.Col(
+                    [
                 html.H5('THE BAR CHART'),
                 html.P('Number of countries:'),
                 dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
-                dcc.Graph(id='plot-bar', figure=fig_bar)
+                dcc.Graph(id='plot-bar', figure=fig_bar)],
+                dbc.Col(
+                    [
+                html.H5('THE PIE CHART'),
+                dcc.Graph(id='plot-pie', figure=fig-pie)])
             ]
         ),
         html.Hr(),
