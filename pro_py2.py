@@ -137,7 +137,7 @@ app.layout = dbc.Container([
                     dbc.NavLink("Pie Chart", href="#", id="pie-chart-link"),
                     dbc.NavLink("Scatter Plot", href="#", id="scatter-plot-link"),
                 ],
-                vertical=True,
+                vertical=False,
                 pills=True,
             ),
         ], md=15),
@@ -147,50 +147,8 @@ app.layout = dbc.Container([
         ], md=15)
     ]),
     
-    html.Hr(),
-
-    dbc.Row([
-        dbc.Col([
-            html.Hr(),
-            html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-          html.Hr(),
-            html.H5('THE BAR CHART'),
-            html.P('Number of countries:'),
-            dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
-            dcc.Graph(id='plot-bar', figure=fig_bar)
-        ], md=5),
-
-        dbc.Col([
-            html.H5('THE PIE CHART'),
-            dcc.Graph(id='plot-pie', figure=fig_pie)
-        ], md=5)
-    ]),
-
-    html.Hr(),
-
-    dbc.Row([
-        html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-      html.Hr(),
-        dbc.Col([
-           
-            html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
-            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 650}),
-        ], width=6),
-
-        dbc.Col([
-            html.Hr(),
-            html.H5('THE SCATTER PLOT', className='text-center'),
-            html.Hr(),
-            html.H6('Select genre that you want to see:', className='text-center'),
-            dcc.Dropdown(
-                id='dropdown',
-                options=[{"label": option, "value": option} for option in data["MAIN_GENRE"].unique()],
-                value="drama"
-            ),
-            
-            dcc.Graph(id="plot-sub-box",style={'height': 650}),
-        ], width=5)
-    ],style={'margin': '30px'}),
+  
+  
     
 ], fluid=True)
 
