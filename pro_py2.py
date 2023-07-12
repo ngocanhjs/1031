@@ -140,7 +140,7 @@ app.layout = dbc.Container([
                 vertical=True,
                 pills=True,
             ),
-        ], md=2),
+        ], md=10),
 
         dbc.Col([
             html.Div(id="content"),
@@ -172,7 +172,7 @@ app.layout = dbc.Container([
         dbc.Col([
             html.Hr(),
             html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
-            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 950}),
+            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 650}),
         ], width=6),
 
         dbc.Col([
