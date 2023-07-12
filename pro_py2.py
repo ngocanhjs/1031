@@ -140,11 +140,11 @@ app.layout = dbc.Container([
                 vertical=True,
                 pills=True,
             ),
-        ], md=10),
+        ], md=15),
 
         dbc.Col([
             html.Div(id="content"),
-        ], md=10)
+        ], md=15)
     ]),
     
     html.Hr(),
@@ -153,24 +153,26 @@ app.layout = dbc.Container([
         dbc.Col([
             html.Hr(),
             html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+          html.Hr(),
             html.H5('THE BAR CHART'),
             html.P('Number of countries:'),
             dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
             dcc.Graph(id='plot-bar', figure=fig_bar)
-        ], md=6),
+        ], md=5),
 
         dbc.Col([
             html.H5('THE PIE CHART'),
             dcc.Graph(id='plot-pie', figure=fig_pie)
-        ], md=6)
+        ], md=5)
     ]),
 
     html.Hr(),
 
     dbc.Row([
         html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+      html.Hr(),
         dbc.Col([
-            html.Hr(),
+           
             html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 650}),
         ], width=6),
@@ -186,7 +188,7 @@ app.layout = dbc.Container([
                 value="drama"
             ),
             
-            dcc.Graph(id="plot-sub-box"),
+            dcc.Graph(id="plot-sub-box",style={'height': 650}),
         ], width=5)
     ],style={'margin': '30px'}),
     
