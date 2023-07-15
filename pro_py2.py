@@ -82,7 +82,7 @@ app.layout = dbc.Container([
             html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
             html.H6("This interactive web application features a variety of visualizations to help users explore Netflix TV show production data",
                     style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
-            html.A('Click here for more information', href='https://www.netflix.com/',
+            html.A('Click here for more information', href='https://www.canva.com/design/DAFlTrarBAE/5PH1kWBRhPp9B3XbF5gjKw/view?utm_content=DAFlTrarBAE&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink',
                    style={'text-align': 'center', 'color': 'blue', 'font-style': 'italic', 'font-size': '14px'}),
             html.Hr(),
             # Sidebar
