@@ -80,6 +80,10 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
+            html.H6("This interactive web application features a variety of visualizations to help users explore Netflix TV show production data",
+                    style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+            html.A('Click here for more information', href='https://www.netflix.com/',
+                   style={'text-align': 'center', 'color': 'blue', 'font-style': 'italic', 'font-size': '14px'}),
             html.Hr(),
             # Sidebar
             dbc.Nav(
@@ -127,8 +131,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
         return html.Div([
 
-            html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-
+            html.H2('Top TV shows producing countries', style={'text-align': 'center', 'color': 'black'}),
+             html.H6("The first analysis begins by finding the top 10 countries that produce the largest number of content titles.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
             html.H5('THE BAR CHART'),
 
             html.P('Number of countries:'),
@@ -147,9 +151,9 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
             html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
 
-            html.H5('THE MAIN BOX CHART', style={'text-align': 'center'}),
+            html.H5('THE BOX CHART', style={'text-align': 'center'),
 
-            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 950}),
+            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
 
         ])
 
@@ -159,7 +163,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
         return html.Div([
 
-            html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+            html.H2('The Distribution of Main Production', style={'text-align': 'center', 'color': 'black'}),
+html.H6("The pie chart illustrates the percentage distribution of country production.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
 
             html.H5('THE PIE CHART'),
 
@@ -174,6 +179,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
         return html.Div([
 
             html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+            html.H6("The distribution of TV shows according to score and the release year from 1970 to 2022",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+
 
             html.H5('THE SCATTER PLOT', className='text-center'),
 
@@ -199,7 +206,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
         return html.Div([
 
-            html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+            html.H2('Top TV shows producing countries', style={'text-align': 'center', 'color': 'black'}),
+              html.H6("The first analysis begins by finding the top 10 countries that produce the largest number of content titles.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
 
             html.H5('THE BAR CHART'),
 
