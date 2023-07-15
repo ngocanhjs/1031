@@ -80,7 +80,7 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H1('NETFLIX TV SHOW DATA VISUALIZATION', style={'text-align': 'center'}),
-            html.H6("This interactive web application features a variety of visualizations to help users explore Netflix TV show production data",
+            html.H6("This interactive web application features a variety of visualizations to help users explore Netflix TV show production data (especially on main_genre and main_production).",
                     style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
             html.A('Click here for more information', href='https://www.canva.com/design/DAFlTrarBAE/5PH1kWBRhPp9B3XbF5gjKw/view?utm_content=DAFlTrarBAE&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink',
                    style={'text-align': 'center', 'color': 'blue', 'font-style': 'italic', 'font-size': '14px'}),
@@ -150,6 +150,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
         return html.Div([
 
             html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
+            html.H6('The box chart is a visual display that effectively represents the distribution of movie genres. Each genre is represented by a box, with the length of the box indicating the spread and variability of that particular genre. The horizontal line inside the box represents the median genre, while the whiskers extending from the box indicate the range of values.',style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+            html.H5('THE BAR CHART'),
 
             html.H5('THE BOX CHART'),
 
@@ -167,6 +169,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 html.H6("The pie chart illustrates the percentage distribution of country production.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
 
             html.H5('THE PIE CHART'),
+            html.H6('The pie chart is an effective way to display the percentage distribution of country production, particularly when there are a limited number of countries to be represented. In this case, with 12 countries in total, the pie chart can clearly showcase the relative sizes of each country's contribution to production. Each country is represented by a slice of the pie, with its size proportional to the percentage it contributes to the total production.',style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+            html.H5('THE BAR CHART'),
 
             dcc.Graph(id='plot-pie', figure=fig_pie),
 
@@ -182,9 +186,9 @@ html.H6("The pie chart illustrates the percentage distribution of country produc
             html.H6("The distribution of TV shows according to score and the release year from 1970 to 2022",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
 
 
-            html.H5('THE SCATTER PLOT', className='text-center'),
+            html.H5('THE SCATTER PLOT'),
 
-            html.H6('Select genre that you want to see:', className='text-center'),
+            html.H6('Select genre that you want to see:'),
 
             dcc.Dropdown(
 
