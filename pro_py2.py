@@ -169,7 +169,7 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 html.H6("The pie chart illustrates the percentage distribution of country production.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
 
             html.H5('THE PIE CHART'),
-            html.H6('The pie chart is an effective way to display the percentage distribution of country production, particularly when there are a limited number of countries to be represented. In this case, with 12 countries in total, the pie chart can clearly showcase the relative sizes of each country's contribution to production. Each country is represented by a slice of the pie, with its size proportional to the percentage it contributes to the total production.',style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+             html.H6('The box chart is a visual display that effectively represents the distribution of movie genres. Each genre is represented by a box, with the length of the box indicating the spread and variability of that particular genre. The horizontal line inside the box represents the median genre, while the whiskers extending from the box indicate the range of values.',style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
             html.H5('THE BAR CHART'),
 
             dcc.Graph(id='plot-pie', figure=fig_pie),
