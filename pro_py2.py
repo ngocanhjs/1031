@@ -150,10 +150,11 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
         return html.Div([
 
             html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-            html.H6('The box chart is a visual display that effectively represents the distribution of movie genres. Each genre is represented by a box, with the length of the box indicating the spread and variability of that particular genre. The horizontal line inside the box represents the median genre, while the whiskers extending from the box indicate the range of values.',style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
-            html.H5('THE BAR CHART'),
+            html.H6('The box chart is a visual display that effectively represents the distribution of movie genres.',style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+        
 
             html.H5('THE BOX CHART'),
+            html.H6('Each genre is represented by a box, with the length of the box indicating the spread and variability of that particular genre. The horizontal line inside the box represents the median genre, while the whiskers extending from the box indicate the range of values.'),
 
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
 
@@ -167,10 +168,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
             html.H2('The Distribution of Main Production', style={'text-align': 'center', 'color': 'black'}),
 html.H6("The pie chart illustrates the percentage distribution of country production.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
-
-            html.H5('THE PIE CHART'),
-             html.H6('The box chart is a visual display that effectively represents the distribution of movie genres. Each genre is represented by a box, with the length of the box indicating the spread and variability of that particular genre. The horizontal line inside the box represents the median genre, while the whiskers extending from the box indicate the range of values.',style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
-            html.H5('THE BAR CHART'),
+            html.H5('THE BAR CHART')<
+            html.H6('The pie chart depicts the proportion of 12 countries production. Each country is represented by a slice of the pie, with its size proportional to the percentage it contributes to the total production.'),
 
             dcc.Graph(id='plot-pie', figure=fig_pie),
 
