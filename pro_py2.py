@@ -151,7 +151,7 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
             html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
 
-            html.H5('THE BOX CHART', style={'text-align': 'center'),
+            html.H5('THE BOX CHART'),
 
             dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
 
