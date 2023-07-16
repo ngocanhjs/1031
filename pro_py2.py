@@ -139,7 +139,7 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
             html.P('Number of countries:'),
 
-            dcc.Slider(id='slider', min=1, max=10, step=1, value=5),
+            dcc.Slider(id='slider', min=1, max=10, step=1, value=10),
 
             dcc.Graph(id='plot-bar'),
 
@@ -168,8 +168,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
         return html.Div([
 
             html.H2('The Distribution of Main Production', style={'text-align': 'center', 'color': 'black'}),
-html.H6("The pie chart illustrates the percentage distribution of country production.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
-            html.H5('THE BAR CHART'),
+
+            html.H5('THE PIE CHART'),
             html.H6('The pie chart depicts the proportion of 12 countries production. Each country is represented by a slice of the pie, with its size proportional to the percentage it contributes to the total production.'),
 
             dcc.Graph(id='plot-pie', figure=fig_pie),
