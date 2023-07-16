@@ -19,7 +19,9 @@ import plotly.graph_objects as go
 data = pd.read_csv('https://raw.githubusercontent.com/ngocanhjs/1031/main/data.csv')
 
 # Create the bar chart
-df_bar = data['MAIN_PRODUCTION'].value_counts().nlargest(n=5, keep='all').sort_values(ascending=False)
+df = data['MAIN_PRODUCTION'].value_counts()
+value = 5
+df_bar = df.nlargest(n=value, keep='all').sort_values(ascending=False)
 trace_bar = go.Bar(
     y=df_bar.values,
     x=df_bar.index,
@@ -137,7 +139,7 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
             html.P('Number of countries:'),
 
-            dcc.Slider(id='slider', min=1, max=10, step=1, value=5),
+            dcc.Slider(id='slider', min=1, max=10, step=1, value=value),
 
             dcc.Graph(id='plot-bar'),
 
