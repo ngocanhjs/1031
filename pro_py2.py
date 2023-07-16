@@ -156,7 +156,7 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
             html.H5('THE BOX CHART'),
         
 
-            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 750}),
+            dcc.Graph(id='plot-box', figure=fig_box, style={'height': 550}),
 
         ])
 
@@ -182,8 +182,6 @@ html.H6("The pie chart illustrates the percentage distribution of country produc
         return html.Div([
 
             html.H2('The Distribution of Main Genre', style={'text-align': 'center', 'color': 'black'}),
-            html.H6("The distribution of TV shows according to score and the release year from 1970 to 2022",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
-
 
             html.H5('THE SCATTER PLOT'),
 
@@ -216,7 +214,7 @@ html.H6("The pie chart illustrates the percentage distribution of country produc
 
             html.P('Number of countries:'),
 
-            dcc.Slider(id='slider', min=1, max=5, step=1, value=5),
+            dcc.Slider(id='slider', min=1, max=10, step=1, value=5),
 
             dcc.Graph(id='plot-bar'),
 
@@ -260,7 +258,7 @@ def update_scatter_plot(genre_selection):
 
     fig = px.scatter(data_subset, x="RELEASE_YEAR", y="SCORE", color="MAIN_GENRE",
 
-                     title=f"The scatter plot for {genre_selection} genre",
+                     title=f"The distribution of  {genre_selection} TV shows according to score and the release year from 1970 to 2022",
 
                      color_discrete_map={genre: color for genre, color in zip(data['MAIN_GENRE'].unique(), ['goldenrod', 'hotpink', 'chocolate', 'lawngreen', 'dodgerblue'])})
 
