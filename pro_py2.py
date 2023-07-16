@@ -139,7 +139,7 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
             html.P('Number of countries:'),
 
-            dcc.Slider(id='slider', min=1, max=10, step=1, value=value),
+            dcc.Slider(id='slider', min=1, max=10, step=1, value=5),
 
             dcc.Graph(id='plot-bar'),
 
@@ -215,7 +215,7 @@ html.H6("The pie chart illustrates the percentage distribution of country produc
 
             html.P('Number of countries:'),
 
-            dcc.Slider(id='slider', min=1, max=10, step=1, value=5),
+            dcc.Slider(id='slider', min=1, max=10, step=1, value=value),
 
             dcc.Graph(id='plot-bar'),
 
@@ -231,7 +231,7 @@ html.H6("The pie chart illustrates the percentage distribution of country produc
 
 def update_bar_chart(value):
 
-    df1 = df_bar.nlargest(n=value, keep='all').sort_values(ascending=False)
+    df1 = df_bar.nlargest(n=10, keep='all').sort_values(ascending=False)
 
     fig = go.Figure(data=[go.Bar(y=df1.values, x=df1.index, orientation='v',
 
