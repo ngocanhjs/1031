@@ -30,7 +30,7 @@ trace_bar = go.Bar(
 )
 data_bar = [trace_bar]
 layout_bar = go.Layout(
-    title='Top 5 countries with the most TV shows (1970-2020)',
+    title='Top 10 countries with the most TV shows (1970-2020)',
     xaxis=dict(title='Main Production'),
     yaxis=dict(title='Number of TV shows'),
     height=400
@@ -132,7 +132,8 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
         return html.Div([
 
             html.H2('Top TV shows producing countries', style={'text-align': 'center', 'color': 'black'}),
-             html.H6("The first analysis begins by finding the top 10 countries that produce the largest number of content titles.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+            html.H6("The first analysis begins by finding the top 10 countries that produce the largest number of content titles.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+
             html.H5('THE BAR CHART'),
 
             html.P('Number of countries:'),
@@ -204,10 +205,10 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
     else:
 
-        return html.Div([
+         return html.Div([
 
             html.H2('Top TV shows producing countries', style={'text-align': 'center', 'color': 'black'}),
-              html.H6("The first analysis begins by finding the top 10 countries that produce the largest number of content titles.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
+            html.H6("The first analysis begins by finding the top 10 countries that produce the largest number of content titles.",style={'text-align': 'center', 'color': 'lightblack', 'font-style': 'italic'}),
 
             html.H5('THE BAR CHART'),
 
@@ -218,7 +219,6 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
             dcc.Graph(id='plot-bar'),
 
         ])
-
  
 
  
@@ -229,7 +229,7 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
 
 def update_bar_chart(value):
 
-    df1 = df_bar.nlargest(n=5, keep='all').sort_values(ascending=False)
+    df1 = df_bar.nlargest(n=value, keep='all').sort_values(ascending=False)
 
     fig = go.Figure(data=[go.Bar(y=df1.values, x=df1.index, orientation='v',
 
@@ -244,6 +244,7 @@ def update_bar_chart(value):
                       height=400)
 
     return fig
+
 
  
 
