@@ -97,7 +97,7 @@ app.layout = dbc.Container([
                 ],
                 vertical=False,
                 pills=True,
-            ),
+            ), html.Hr(),
         ], md=15),
         dbc.Col([
             html.Div(id="content"),
@@ -170,7 +170,7 @@ def update_content(bar_chart_clicks, box_chart_clicks, pie_chart_clicks, scatter
             html.H2('The Distribution of Main Production', style={'text-align': 'center', 'color': 'black'}),
 
             html.H5('THE PIE CHART'),
-            html.H6('The pie chart depicts the proportion of 12 countries production. Each country is represented by a slice of the pie, with its size proportional to the percentage it contributes to the total production.'),
+            html.H6('The pie chart depicts the proportion of 12 countries production. Each country is represented by a slice of the pie, with its size proportional to the percentage it contributes to the total production.', 'font-style':'arial', 'italic'),
 
             dcc.Graph(id='plot-pie', figure=fig_pie),
 
